@@ -1,0 +1,11 @@
+{
+  "name": "adolesente",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AdoleSente: espaço diário de apoio para pré-adolescentes (ODS 4).",
+  "scripts": {
+    "dev": "npx --yes serve public -l 3000",
+    "start": "npx --yes serve public -l 3000"
+  },
+  "engines": { "node": ">=18" }
+}

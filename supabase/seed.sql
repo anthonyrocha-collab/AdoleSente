@@ -1,0 +1,86 @@
+-- AdoleSente · conteúdo inicial. Rode DEPOIS do schema.sql.
+-- Usa o conteúdo que já vem no app (4 personagens, sugestões, perguntas e ideias do diário).
+
+truncate public.characters, public.suggestions, public.questions, public.diary_ideas restart identity;
+
+insert into public.characters (id,position,name,role,bio,traits,likes,color,img_url,quote,fields) values ('c1',0,'Estéfani','A criativa','Transforma qualquer sobra em colagem. Sempre tem uma ideia nova guardada no bolso.',array['curiosa','artista','bem-humorada']::text[],'Tesoura, revistas velhas e glitter.','#892CB0','','Toda sobra vira uma ideia.','[{"k": "Idade", "v": "12 anos"}]'::jsonb);
+insert into public.characters (id,position,name,role,bio,traits,likes,color,img_url,quote,fields) values ('c2',1,'Caio','O explorador','Gosta de descobrir como as coisas funcionam e de caminhar sem rumo definido.',array['aventureiro','observador','leal']::text[],'Mapas, trilhas curtas e fones de ouvido.','#06A700','','','[]'::jsonb);
+insert into public.characters (id,position,name,role,bio,traits,likes,color,img_url,quote,fields) values ('c3',2,'Lia','A ouvinte','Escuta com atenção e sempre lembra do que você contou. Escreve bilhetes para as amigas.',array['empática','calma','atenta']::text[],'Chá, cadernos e playlists longas.','#6C318C','','','[]'::jsonb);
+insert into public.characters (id,position,name,role,bio,traits,likes,color,img_url,quote,fields) values ('c4',3,'Duda','A animada','Chega rindo e puxa todo mundo para dançar. Também sabe quando é hora de ficar quieta.',array['animada','corajosa','divertida']::text[],'Dança, pipoca e filme de comédia.','#EE82EE','','','[]'::jsonb);
+
+insert into public.suggestions (category,title,body) values ('Colagem','Colagem do seu momento','Junte revistas, papéis e fotos antigas. Monte uma colagem que represente como você está hoje.');
+insert into public.suggestions (category,title,body) values ('Desenho','Seu quarto dos sonhos','Desenhe o quarto ideal sem se preocupar com tamanho ou dinheiro. Invente móveis que não existem.');
+insert into public.suggestions (category,title,body) values ('Customização','Dê uma cara nova ao caderno','Escolha um caderno ou estojo e decore com adesivos, tecido ou canetinhas. Faça ficar com a sua cara.');
+insert into public.suggestions (category,title,body) values ('Música','Playlist de 5 músicas','Monte uma playlist com 5 músicas para um dia de chuva. Depois escute com os olhos fechados.');
+insert into public.suggestions (category,title,body) values ('Escrita','Carta para você daqui a um ano','Escreva o que você quer lembrar sobre este momento. Guarde num envelope e marque a data para abrir.');
+insert into public.suggestions (category,title,body) values ('Movimento','Dez minutos lá fora','Dê uma volta no quarteirão ou no quintal e procure três coisas que você nunca tinha reparado.');
+insert into public.suggestions (category,title,body) values ('Cozinha','Lanche montado por você','Com ajuda de um adulto, invente um lanche com ingredientes que você já tem em casa. Dê um nome a ele.');
+insert into public.suggestions (category,title,body) values ('Artesanato','Pulseira de amizade','Faça uma pulseira de linha ou miçanga para dar a alguém de quem você gosta.');
+insert into public.suggestions (category,title,body) values ('Jogo','Caça ao tesouro em casa','Esconda um objeto pequeno e escreva três pistas para quem for procurar. Peça para alguém da família tentar achar.');
+insert into public.suggestions (category,title,body) values ('Natureza','Coleção de folhas','Recolha folhas de formatos diferentes no caminho. Cole num caderno e escreva do que cada uma lembra.');
+insert into public.suggestions (category,title,body) values ('Leitura','Dez páginas de um livro','Escolha um livro ou gibi e leia dez páginas sem pressa. Depois conte para alguém o que aconteceu.');
+insert into public.suggestions (category,title,body) values ('Gratidão','Três coisas boas do dia','Escreva ou desenhe três coisas boas que aconteceram hoje, mesmo as pequenas. Guarde numa caixinha.');
+insert into public.suggestions (category,title,body) values ('Amizade','Bilhete para uma amiga','Escreva um bilhete curto e bonito para alguém de quem você gosta. Decore com desenhos e entregue pessoalmente.');
+insert into public.suggestions (category,title,body) values ('Desenho','Autorretrato de olhos fechados','Feche os olhos e desenhe o seu rosto de memória. Depois abra e acrescente os detalhes que faltaram.');
+insert into public.suggestions (category,title,body) values ('Música','Instrumento com o que tem em casa','Use potes, colheres de pau e elásticos para inventar um instrumento. Crie um ritmo e dê um nome a ele.');
+insert into public.suggestions (category,title,body) values ('Organização','Arrume um cantinho','Escolha uma gaveta ou prateleira e deixe do seu jeito. Separe o que você quer guardar e o que pode doar.');
+insert into public.suggestions (category,title,body) values ('Movimento','Coreografia de uma música','Escolha uma música de que você gosta e invente quatro passos. Ensine para alguém ou grave só para você lembrar.');
+insert into public.suggestions (category,title,body) values ('Escrita','História em cinco frases','Invente uma história com começo, meio e fim em apenas cinco frases. Os personagens podem ser bichos ou objetos.');
+insert into public.suggestions (category,title,body) values ('Cozinha','Suco ou limonada especial','Com ajuda de um adulto, misture frutas, gelo e folhinhas de hortelã. Invente o nome da bebida e decore o copo.');
+insert into public.suggestions (category,title,body) values ('Colagem','Mural dos sonhos','Recorte imagens e palavras de que você gosta e monte um mural com o que quer viver no próximo ano.');
+insert into public.suggestions (category,title,body) values ('Artesanato','Marcador de página','Faça um marcador de papel ou tecido com desenho, franjas ou uma frase. Use no livro que você está lendo.');
+insert into public.suggestions (category,title,body) values ('Natureza','Olhe para o céu','Deite ou sente num lugar seguro e observe as nuvens por cinco minutos. Desenhe a forma mais engraçada que você viu.');
+insert into public.suggestions (category,title,body) values ('Jogo','Mímica em família','Escreva nomes de filmes, bichos e profissões em papeizinhos. Sorteiem e façam mímica até todo mundo adivinhar.');
+insert into public.suggestions (category,title,body) values ('Customização','Personalize uma garrafa','Com tinta ou adesivos que lavam, decore a sua garrafa de água. Escreva o seu nome de um jeito diferente.');
+
+insert into public.questions (body) values ('Qual filme você assistiria de novo hoje?');
+insert into public.questions (body) values ('Qual hobby você gostaria de começar?');
+insert into public.questions (body) values ('Qual música está grudada na sua cabeça?');
+insert into public.questions (body) values ('O que fez você rir nesta semana?');
+insert into public.questions (body) values ('Qual é o seu lugar favorito para ficar sozinho(a)?');
+insert into public.questions (body) values ('Se pudesse aprender qualquer coisa em um dia, o que seria?');
+insert into public.questions (body) values ('Qual cheiro lembra um lugar bom para você?');
+insert into public.questions (body) values ('Quem você gostaria de agradecer hoje?');
+insert into public.questions (body) values ('Qual livro ou história você leria de novo?');
+insert into public.questions (body) values ('Qual comida deixa você feliz só de pensar?');
+insert into public.questions (body) values ('Qual foi a melhor parte do seu dia até agora?');
+insert into public.questions (body) values ('Se você tivesse um superpoder por um dia, qual seria?');
+insert into public.questions (body) values ('Qual é a sua lembrança favorita da infância?');
+insert into public.questions (body) values ('Com quem você gostaria de passar uma tarde inteira?');
+insert into public.questions (body) values ('Qual desenho ou série você nunca cansa de ver, e por quê?');
+insert into public.questions (body) values ('O que você faria com um dia livre, sem nenhuma obrigação?');
+insert into public.questions (body) values ('Qual cor representa como você está se sentindo hoje?');
+insert into public.questions (body) values ('Qual foi a coisa mais legal que você aprendeu esta semana?');
+insert into public.questions (body) values ('Qual lugar do mundo você quer conhecer?');
+insert into public.questions (body) values ('Qual música você colocaria para animar um dia ruim?');
+insert into public.questions (body) values ('Qual pequeno hábito você gostaria de criar?');
+insert into public.questions (body) values ('Qual jogo ou brincadeira você nunca enjoa?');
+insert into public.questions (body) values ('O que você diria para você mesmo(a) de um ano atrás?');
+insert into public.questions (body) values ('Qual bicho de estimação você teria, e que nome daria a ele?');
+
+insert into public.diary_ideas (body) values ('Como foi o seu dia em três palavras? Agora explique cada uma delas.');
+insert into public.diary_ideas (body) values ('Se você pudesse ter um superpoder por um dia, qual seria e o que faria com ele?');
+insert into public.diary_ideas (body) values ('Escreva sobre algo que fez você rir hoje.');
+insert into public.diary_ideas (body) values ('Qual é o seu lugar favorito no mundo? Descreva como se eu nunca tivesse ido lá.');
+insert into public.diary_ideas (body) values ('Escreva uma carta para você mesmo(a) daqui a cinco anos.');
+insert into public.diary_ideas (body) values ('Qual foi a coisa mais legal que você aprendeu essa semana?');
+insert into public.diary_ideas (body) values ('Invente um personagem novo: nome, jeito de ser e uma mania engraçada.');
+insert into public.diary_ideas (body) values ('Do que você tem orgulho em você?');
+insert into public.diary_ideas (body) values ('Se pudesse mudar uma coisa na sua escola, o que seria?');
+insert into public.diary_ideas (body) values ('Escreva sobre alguém que te inspira e por quê.');
+insert into public.diary_ideas (body) values ('Qual música você não cansa de ouvir? Como ela faz você se sentir?');
+insert into public.diary_ideas (body) values ('Descreva com palavras o que você está vendo pela janela agora.');
+insert into public.diary_ideas (body) values ('Qual sonho (de dormir ou de futuro) você nunca esqueceu?');
+insert into public.diary_ideas (body) values ('Se o seu animal favorito pudesse falar, o que ele diria?');
+insert into public.diary_ideas (body) values ('Escreva três coisas pelas quais você é grato(a) hoje.');
+insert into public.diary_ideas (body) values ('Conte um momento em que você foi corajoso(a).');
+insert into public.diary_ideas (body) values ('O que você faria com um dia livre, sem nenhuma obrigação?');
+insert into public.diary_ideas (body) values ('Continue a história: “Naquela manhã, o céu estava diferente…”');
+insert into public.diary_ideas (body) values ('Qual é a sua comida favorita? Escreva a receita do jeito que você imagina.');
+insert into public.diary_ideas (body) values ('Do que você sente saudade?');
+insert into public.diary_ideas (body) values ('Como seria a casa dos seus sonhos?');
+insert into public.diary_ideas (body) values ('Escreva sobre algo que você gostaria de aprender a fazer.');
+insert into public.diary_ideas (body) values ('Se você tivesse um amigo imaginário, como ele seria?');
+insert into public.diary_ideas (body) values ('Que conselho você daria para alguém um pouco mais novo que você?');
+insert into public.diary_ideas (body) values ('Complete: “Hoje eu me senti… porque…”');
+insert into public.diary_ideas (body) values ('Uma coisa que me deixa tranquilo(a) é…');

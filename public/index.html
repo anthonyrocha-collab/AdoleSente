@@ -1,0 +1,977 @@
+<meta name="color-scheme" content="only dark">
+<meta name="supported-color-schemes" content="dark">
+<title>AdoleSente</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: app mobile-first. Cabeçalho, uma tela por vez, barra de abas fixa embaixo.
+   Frutiger Metro = vidro e brilho (Frutiger Aero) + tiles planos em grade (Metro).
+   Todas as cores e fontes abaixo são editáveis pelo Estúdio. */
+:root{
+  --brand:#6C318C; --accent:#892CB0; --surface:#06C300; --text:#06A700;
+  --on-brand:#fff; --on-accent:#fff; --on-surface:#06260a;
+  --ink:#f1e6f8; --muted:#bfa8cf; --head:#e2bff5;
+  --bg:#170a21; --bg2:#0e2310; --card:rgba(46,24,64,.78); --card-solid:#2a1639; --line:rgba(255,255,255,.16);
+  --r-card:24px; --r-btn:999px; --r-input:12px; --r-tile:16px;
+  --f-display:"Space Grotesk",system-ui,sans-serif; --f-body:"Inter",system-ui,sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+  --nav-h:calc(54px + 1.2rem); --scale:1; --logo-h:38px;
+}
+/* Tema escuro fixo: igual em qualquer aparelho, independente do modo do sistema. */
+:root{color-scheme:only dark}
+html,body{forced-color-adjust:none;-webkit-text-size-adjust:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+
+*{box-sizing:border-box}
+:root{font-size:calc(17.5px * var(--scale))}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:1rem;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 calc(var(--nav-h) + 24px);min-height:100vh}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+   radial-gradient(circle at 12% 8%,color-mix(in srgb,var(--surface) 38%,transparent) 0 70px,transparent 71px),
+   radial-gradient(circle at 88% 22%,color-mix(in srgb,var(--accent) 30%,transparent) 0 110px,transparent 111px),
+   radial-gradient(circle at 70% 78%,color-mix(in srgb,var(--surface) 26%,transparent) 0 90px,transparent 91px),
+   radial-gradient(circle at 8% 70%,color-mix(in srgb,var(--brand) 22%,transparent) 0 130px,transparent 131px),
+   radial-gradient(circle at 46% 96%,color-mix(in srgb,var(--extra) 34%,transparent) 0 100px,transparent 101px),
+   linear-gradient(160deg,var(--bg),var(--bg2));
+  background-color:var(--bg)}
+.wrap{max-width:760px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);color:var(--head);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(1.9rem,6vw,2.6rem)} h2{font-size:1.4rem} h3{font-size:1.1rem}
+p{margin:0}
+.accent-text{color:var(--text)}
+.muted{color:var(--muted);font-size:.92rem}
+.lbl{font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:16px}
+.brandmark{display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.brandmark img{height:var(--logo-h);width:auto;max-width:62vw;object-fit:contain;display:block}
+.brandmark b{font-family:var(--f-display);font-size:clamp(1.1rem,calc(var(--logo-h) * .6),3rem);color:var(--head);letter-spacing:-.01em}
+.brandmark b i{font-style:normal;color:var(--text)}
+.whatbtn{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--head);font:600 .85rem var(--f-display);cursor:pointer;white-space:nowrap}
+.whatbtn:hover{border-color:var(--accent)}
+.about p{margin:0 0 12px;line-height:1.6}
+.iconbtn{width:44px;height:44px;border-radius:var(--r-btn);border:1px solid var(--line);background:var(--card);color:var(--head);
+  display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(8px)}
+.iconbtn svg{width:22px;height:22px}
+
+/* vidro */
+.glass{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:20px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px -14px color-mix(in srgb,var(--brand) 55%,transparent),inset 0 1px 0 rgba(255,255,255,.5)}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.grow{flex:1;min-width:0}
+
+/* botões brilhantes */
+.btn{--c:var(--brand);--on:var(--on-brand);position:relative;overflow:hidden;border:0;cursor:pointer;
+  font:600 1rem var(--f-body);color:var(--on);padding:12px 22px;min-height:44px;border-radius:var(--r-btn);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 88%,#000));
+  box-shadow:0 6px 14px -6px color-mix(in srgb,var(--c) 80%,#000),inset 0 -2px 0 rgba(0,0,0,.12);
+  text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn::after{content:"";position:absolute;left:6%;right:6%;top:3px;height:46%;border-radius:inherit;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0));pointer-events:none}
+.btn:active{transform:translateY(1px)}
+.btn.accent{--c:var(--accent);--on:var(--on-accent)}
+.btn.surface{--c:var(--surface);--on:var(--on-surface)}
+.btn.ghost{background:var(--card);color:var(--head);border:1px solid var(--line);box-shadow:none}
+.btn.ghost::after{display:none}
+.btn.small{min-height:36px;padding:6px 14px;font-size:.9rem}
+.btn.danger{--c:#b3261e;--on:#fff}
+body.flat .btn::after{display:none}
+body.nobubbles .bg{background:linear-gradient(160deg,var(--bg),var(--bg2))}
+body.flat .btn{background:var(--c);box-shadow:none}
+
+input,select,textarea{font:inherit;color:var(--ink);background:var(--card-solid);border:1.5px solid var(--line);
+  border-radius:var(--r-input);padding:10px 12px;min-height:44px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:110px}
+input[type=color]{padding:3px;width:52px;min-height:40px;cursor:pointer}
+input[type=checkbox]{width:20px;min-height:20px;accent-color:var(--accent)}
+input[type=file]{padding:8px;font-size:.85rem}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:.88rem;font-weight:600;color:var(--head)}
+.notes-font{font-family:var(--f-mono)}
+
+/* tiles Metro */
+.tiles{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;align-items:start}
+button,a,select,summary,.note,.fcard,.tile{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.tile{--c:var(--brand);--w:3;--h:116px;--rad:var(--r-tile);position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;
+  grid-column:span var(--w);min-height:var(--h);padding:14px;border-radius:var(--rad);border:0;cursor:pointer;text-align:left;text-decoration:none;
+  background:var(--c);overflow:hidden;font-family:var(--f-display);font-weight:700;font-size:1.15rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35);background-repeat:no-repeat;background-position:center}
+.tile::before{content:"";position:absolute;inset:0 0 50% 0;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0));pointer-events:none}
+.tile.circle{aspect-ratio:1;min-height:0;align-self:start;justify-content:center;text-align:center}
+.tile.hasimg{background-size:cover;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.tile.imgonly{background-color:transparent;background-size:contain;box-shadow:none;padding:0}
+.tile.imgonly::before{display:none}
+.tile .lbl-in{position:relative}
+.tile small{font:500 .82rem var(--f-body);opacity:.9}
+.tile:active{transform:scale(.985)}
+
+.hero{position:relative;overflow:hidden;border-radius:var(--r-card);padding:26px 20px;
+  background:linear-gradient(135deg,var(--brand),var(--accent));color:var(--on-brand)}
+.hero.has-img{background-size:cover;background-position:center}
+.hero.has-img::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 80%,transparent),color-mix(in srgb,var(--accent) 55%,transparent))}
+.hero>*{position:relative}
+.hero h1{color:inherit}
+.hero .hi{color:color-mix(in srgb,var(--surface) 75%,#fff)}
+.hero p{opacity:.95;margin-top:8px}
+
+.chip{display:inline-flex;padding:4px 12px;border-radius:999px;font-size:.82rem;font-weight:600;
+  background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--head);border:1px solid var(--line)}
+
+/* amigos: a imagem aparece inteira (corpo todo) */
+.friends{--cols:2;display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:12px}
+.fcard{--c:var(--brand);text-align:left;border:1px solid var(--line);background:var(--card);border-radius:var(--r-card);
+  padding:10px;cursor:pointer;display:flex;flex-direction:column;gap:8px;font:inherit;color:inherit;min-width:0;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.fcard:hover{border-color:var(--accent)}
+.fig{--ratio:auto;--fit:contain;width:100%;border-radius:calc(var(--r-card) - 8px);overflow:hidden;display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--c) 28%,#fff),color-mix(in srgb,var(--c) 70%,#fff) 70%,var(--c));
+  aspect-ratio:var(--ratio)}
+.fig img{display:block;width:100%;height:auto}
+.fig.fixed img{height:100%;object-fit:var(--fit)}
+.fig.ph{aspect-ratio:3/4;color:#fff;font:700 3.2rem var(--f-display)}
+.fcard b{font-family:var(--f-display);color:var(--head);font-size:1.1rem}
+.fcard .bio{font-size:.88rem;color:var(--muted)}
+.friends.list{grid-template-columns:1fr}
+.friends.list .fcard{flex-direction:row;align-items:center}
+.friends.list .fig{width:34%;flex:none}
+.fcard .info{display:flex;flex-direction:column;gap:2px;min-width:0}
+.friends.carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
+.friends.carousel .fcard{flex:0 0 min(72%,260px);scroll-snap-align:start}
+.sheet .fig{max-width:300px;margin-inline:auto}
+.sheet .fig img{max-height:58vh;width:auto;max-width:100%;margin:auto}
+.sheet .fig.fixed img{height:auto;width:100%}
+nav.tabs img{width:24px;height:24px;object-fit:contain}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
+.swrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+/* perfil */
+.av{--s:44px;width:var(--s);height:var(--s);border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;background:var(--brand);color:#fff;
+  font:800 calc(var(--s) * .46) var(--f-display);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 4px 10px -4px rgba(0,0,0,.4)}
+.av img{width:100%;height:100%;object-fit:cover}
+.av svg{width:56%;height:56%}
+.avbtn{border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1.5px solid var(--line);background:var(--card-solid);color:var(--head);border-radius:999px;padding:8px 16px;font:600 .9rem var(--f-body);cursor:pointer;min-height:40px}
+.seg button[aria-pressed=true]{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.icons{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px}
+.icons button{aspect-ratio:1;border-radius:var(--r-tile);border:1.5px solid var(--line);background:var(--card-solid);color:var(--head);cursor:pointer;display:grid;place-items:center;padding:0}
+.icons button svg{width:50%;height:50%}
+.icons button[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 35%,transparent)}
+.palettes{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.pal{border:1.5px solid var(--line);background:var(--card-solid);color:var(--ink);border-radius:var(--r-tile);padding:10px;cursor:pointer;text-align:left;font:600 .88rem var(--f-body);display:flex;flex-direction:column;gap:6px}
+.pal[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 35%,transparent)}
+.pal i{display:flex;height:22px;border-radius:999px;overflow:hidden}
+.pal i b{flex:1}
+/* página do caderno */
+.paper{--paper:#FFFDF3;--lines:#9CC7E6;--mline:#E58C8C;--ink2:#2B2F4A;--lh:32px;--fs:18px;--ml:58px;position:relative;overflow:hidden;
+  background-color:var(--paper);color:var(--ink2);font-family:var(--f-mono);font-size:var(--fs);line-height:var(--lh);
+  border-radius:6px 16px 16px 6px;box-shadow:0 14px 30px -14px rgba(0,0,0,.45),inset -8px 0 12px -10px rgba(0,0,0,.3)}
+.pt-ruled{background-image:linear-gradient(to bottom,transparent calc(var(--lh) - 1px),var(--lines) 0),var(--pimg,none);background-size:100% var(--lh),cover}
+.pt-grid{background-image:linear-gradient(to bottom,transparent calc(var(--lh) - 1px),var(--lines) 0),linear-gradient(to right,transparent calc(var(--lh) - 1px),var(--lines) 0),var(--pimg,none);background-size:100% var(--lh),var(--lh) 100%,cover}
+.pt-dots{background-image:radial-gradient(circle at 1px calc(var(--lh) - 1px),var(--lines) 0 1.5px,transparent 2px),var(--pimg,none);background-size:var(--lh) var(--lh),cover}
+.pt-plain{background-image:var(--pimg,none);background-size:cover}
+.paper.marg::before{content:"";position:absolute;top:0;bottom:0;left:var(--ml);width:2px;background:var(--mline);opacity:.85;z-index:1;pointer-events:none}
+.paper.holes::after{content:"";position:absolute;left:10px;top:0;bottom:0;width:20px;pointer-events:none;z-index:1;
+  background:radial-gradient(circle at 10px calc(var(--lh) * 2),rgba(0,0,0,.28) 0 7px,transparent 8px) 0 0/20px calc(var(--lh) * 6)}
+.phead{height:calc(var(--lh) * 2);padding:0 18px 0 calc(var(--ml) + 14px);display:flex;flex-direction:column;justify-content:flex-end}
+.pdate{font-size:.62em;line-height:var(--lh);height:var(--lh);opacity:.7;letter-spacing:.04em}
+.paper .ptitle{display:block;width:100%;height:var(--lh);border:0;background:transparent;color:inherit;font:800 1em/var(--lh) var(--f-display);padding:0;min-height:0;border-radius:0}
+.paper textarea.ptext{display:block;width:100%;border:0;background:transparent;color:inherit;font:inherit;line-height:var(--lh);
+  padding:0 18px 0 calc(var(--ml) + 14px);min-height:calc(var(--lh) * 14);resize:none;overflow:hidden;border-radius:0}
+.paper input::placeholder,.paper textarea::placeholder{color:inherit;opacity:.4}
+.paper :focus-visible{outline:none}
+.paper:focus-within{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 45%,transparent),0 14px 30px -14px rgba(0,0,0,.45)}
+@media (max-width:480px){.paper{--ml:40px}}
+body.mob .paper{--ml:40px}
+.codebox{font:700 1.5rem var(--f-mono);letter-spacing:.1em;text-align:center;padding:18px 10px;border:2px dashed var(--accent);border-radius:var(--r-input);background:var(--card-solid);color:var(--ink);user-select:all;word-break:break-all}
+.tut{position:fixed;left:0;right:0;margin-inline:auto;bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom,0px));z-index:55;width:min(420px,calc(100% - 24px));background:var(--card-solid);color:var(--ink);border:1px solid var(--accent);border-radius:var(--r-card);padding:16px 16px 14px;box-shadow:0 12px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:10px;animation:fup .35s ease both}
+.tut h3{margin:0;font:700 1.05rem var(--f-display);color:var(--head)}
+.tut p{margin:0;line-height:1.5}
+.tut .tdots{display:flex;gap:6px}.tut .tdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.tut .tdots i.on{background:var(--accent)}
+.tut .row{justify-content:space-between;flex-wrap:wrap}
+.tut-hl{outline:3px solid var(--extra)!important;outline-offset:3px;border-radius:14px;animation:tutp 1.2s ease-in-out infinite}
+@keyframes tutp{50%{outline-color:var(--accent);outline-offset:6px}}
+.ideas{display:flex;flex-direction:column;gap:8px;padding:14px 16px}
+.ideas .idtxt{margin:0;font-weight:600;color:var(--ink);line-height:1.45}
+body.mob .tut{bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom,0px))}
+.presets{display:flex;gap:8px;flex-wrap:wrap}
+.preset{border:2px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;font:600 .85rem var(--f-body);color:#2b2f4a;min-height:40px}
+.welcome{display:flex;flex-direction:column;justify-content:center;line-height:1.2;overflow:hidden;background-repeat:no-repeat;background-position:center;position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 24px -14px rgba(0,0,0,.4)}
+.welcome.hasimg{text-shadow:0 1px 5px rgba(0,0,0,.6)}
+.welcome.onlyimg{background:none;box-shadow:none;padding:0;min-height:0}
+.welcome.onlyimg img{display:block;width:100%;height:auto}
+/* ficha do personagem, no estilo "meet the artist" */
+#profOv{align-items:center;justify-content:center;padding:0}
+.profile{--c:#892CB0;--ex:#EE82EE;--fg:#fff;position:relative;width:100%;height:100%;max-width:920px;overflow:hidden;color:var(--fg);
+  background:linear-gradient(115deg,var(--c) 0%,var(--c) 38%,color-mix(in srgb,var(--c) 45%,var(--ex)) 70%,var(--ex) 100%)}
+body:not(.mob) .profile{height:min(92vh,680px);border-radius:var(--r-card)}
+body:not(.mob) #profOv{padding:16px}
+.profile::after{content:"";position:absolute;right:-12%;bottom:-18%;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.35),rgba(255,255,255,0) 68%);pointer-events:none}
+.pmark{position:absolute;right:-2%;top:2%;font:800 clamp(5rem,26vw,12rem) var(--f-display);opacity:.14;line-height:.9;white-space:nowrap;pointer-events:none;user-select:none}
+.pinfo{position:relative;z-index:2;width:56%;height:100%;overflow:auto;padding:max(24px,env(safe-area-inset-top,0px)) 8px 84px 22px;display:flex;flex-direction:column;gap:12px;animation:fup .5s ease both}
+.pkick{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.8}
+.pname{font:800 clamp(2rem,9.5vw,3.8rem) var(--f-display);line-height:1;color:inherit;margin:0;text-wrap:balance;overflow-wrap:anywhere}
+.prole{font:600 1.05rem var(--f-display);margin:0;opacity:.95}
+.pquote{font-style:italic;border-left:3px solid currentColor;padding-left:10px;opacity:.95}
+.pbio{font-size:.95rem;margin:0}
+.pchips{display:flex;gap:6px;flex-wrap:wrap}
+.pchips span{padding:3px 11px;border-radius:999px;border:1.5px solid currentColor;font-size:.78rem;font-weight:600}
+.pdl{display:grid;gap:8px;margin:0}
+.pdl div{border-top:1px solid color-mix(in srgb,currentColor 35%,transparent);padding-top:6px}
+.pdl dt{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;opacity:.75}
+.pdl dd{margin:0;font-size:.95rem}
+.pfig{position:absolute;right:0;bottom:0;top:6%;width:56%;z-index:1;pointer-events:none;animation:fin .55s cubic-bezier(.2,.8,.2,1) both}
+.pfig img{width:100%;height:100%;object-fit:contain;object-position:right bottom;filter:drop-shadow(0 14px 18px rgba(0,0,0,.35))}
+.pfig .pinit{position:absolute;right:8%;bottom:10%;font:800 9rem var(--f-display);opacity:.5}
+.pclose{position:absolute;right:max(12px,env(safe-area-inset-right,0px));top:max(12px,env(safe-area-inset-top,0px));z-index:5;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;background:rgba(255,255,255,.85);color:#2b1238;font-size:1.1rem}
+.pnav{position:absolute;left:18px;bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:5;display:flex;gap:8px;align-items:center;font-weight:700}
+.pnav button{width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;background:rgba(255,255,255,.85);color:#2b1238;font-size:1.4rem;line-height:1}
+@keyframes fup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fin{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+input[type=range]{padding:0;min-height:32px;accent-color:var(--accent)}
+output{font:600 .85rem var(--f-mono);color:var(--muted)}
+
+/* diário */
+.note{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 14px;border-radius:var(--r-input);
+  border:1px solid var(--line);background:var(--card-solid);cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.note.on{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.note span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.empty{text-align:center;padding:28px 12px;color:var(--muted)}
+.empty b{display:block;color:var(--head);font-family:var(--f-display);font-size:1.15rem;margin-bottom:4px}
+.msg{font-size:.9rem;color:var(--muted)}
+.err{color:#ff8a80;font-weight:600;font-size:.9rem}
+
+/* nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;
+  padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line)}
+nav.tabs .in{display:flex;gap:4px;width:100%;max-width:760px}
+nav.tabs button{flex:1;min-width:0;border:0;background:none;cursor:pointer;color:var(--muted);font:600 min(.72rem,13px) var(--f-body);
+  display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:var(--r-tile)}
+nav.tabs svg{width:24px;height:24px}
+nav.tabs button[aria-current=page]{color:var(--on-brand);background:var(--brand)}
+
+/* sheets */
+.overlay{position:fixed;inset:0;z-index:40;background:rgba(20,6,30,.55);display:flex;justify-content:flex-end;align-items:flex-end}
+.overlay[hidden]{display:none!important}
+.sheet{background:var(--card-solid);color:var(--ink);width:100%;max-width:560px;max-height:92vh;max-height:92dvh;display:flex;flex-direction:column;
+  border-radius:var(--r-card) var(--r-card) 0 0;overflow:hidden;margin-inline:auto}
+.sheet header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.sheet .body{padding:16px;overflow:auto;display:flex;flex-direction:column;gap:16px;flex:1;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.panel{border:1px solid var(--line);border-radius:var(--r-tile);padding:14px;display:flex;flex-direction:column;gap:12px}
+.panel>summary{cursor:pointer;font:700 1rem var(--f-display);color:var(--head);display:flex;justify-content:space-between;gap:8px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.thumb{width:72px;height:72px;border-radius:var(--r-input);object-fit:cover;border:1px solid var(--line);background:var(--bg)}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;
+  background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:600;font-size:.9rem;max-width:90vw}
+.toast[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+body:not(.mob) .overlay{align-items:center}
+body:not(.mob) .sheet{border-radius:var(--r-card)}
+/* formato celular: coluna estreita, alvos de toque maiores, tudo empilhado */
+body.mob .wrap{max-width:430px}
+body.mob nav.tabs{left:50%;right:auto;width:100%;max-width:430px;transform:translateX(-50%);padding-left:12px;padding-right:12px;border-radius:var(--r-card) var(--r-card) 0 0;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+body.mob nav.tabs .in{max-width:100%}
+body.mob .overlay{justify-content:center;align-items:flex-end}
+body.mob .sheet{max-width:430px;width:100%;margin-inline:auto}
+body.mob .profile{max-width:430px;height:100%;border-radius:0}
+body.mob .pfig{top:0;width:74%}
+body.mob .pfig img{object-position:right bottom}
+body.mob .pinfo{width:100%;padding:max(20px,env(safe-area-inset-top,0px)) calc(50% + 2px) 84px 16px;gap:9px;scrollbar-width:thin}
+body.mob .pname{font-size:clamp(1.6rem,8vw,2.3rem);text-shadow:0 1px 8px rgba(0,0,0,.35)}
+body.mob .pkick{font-size:.64rem}
+body.mob .prole{font-size:.92rem}
+body.mob .pquote,body.mob .pbio,body.mob .pdl dd{font-size:.82rem;line-height:1.4}
+body.mob .pchips span{font-size:.7rem;padding:2px 9px}
+body.mob .pdl{gap:6px}
+body.mob .pdl dt{font-size:.6rem}
+body.mob .pinfo>*{text-shadow:0 1px 6px rgba(0,0,0,.4)}
+body.mob .btn,body.mob input,body.mob select{min-height:48px}
+body.mob .btn.small{min-height:44px}
+body.mob .friends.grid{grid-template-columns:repeat(min(var(--cols),2),minmax(0,1fr))}
+body.mob .diary-split{flex-direction:column;flex-wrap:nowrap}
+body.mob .diary-split>*{flex:none!important;width:100%;min-width:0!important}
+body.mob .cols{grid-template-columns:1fr}
+body.mob .toast{max-width:min(90vw,400px)}
+body.mob .tiles{align-items:stretch}
+body.mob .sw{width:38px;height:38px}
+body.mob .seg button,body.mob .stabs button{min-height:46px}
+body.mob .note{min-height:52px}
+body.mob .hero{padding:22px 18px}
+body.mob .cols.pc{grid-template-columns:1fr 1fr}
+body.mob h1{font-size:clamp(1.7rem,8vw,2.2rem)}
+body.mob .paper{margin-inline:-10px;border-radius:4px 14px 14px 4px;min-height:max(58dvh,420px);display:flex;flex-direction:column}
+body.mob .paper .ptext{flex:none}
+body.mob .paper{scroll-margin-top:12px}
+body.mob .ndock{position:sticky;bottom:calc(var(--nav-h) + 8px);z-index:5;background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:6px 8px 6px 16px;flex-wrap:nowrap;gap:8px}
+body.mob.typing nav.tabs{display:none}
+body.mob.typing .ndock{bottom:8px}
+body.mob.typing{--nav-h:0px}
+body.mob .pname{font-size:2.4rem}
+body.mob .pmark{font-size:7rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="bg" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <div class="brandmark" id="brand"></div>
+    <div class="row" style="flex-wrap:nowrap;gap:8px"><button class="whatbtn" id="whatIs" type="button">O que sou?</button><button class="iconbtn" id="textSize" aria-label="Mudar o tamanho do texto" title="Tamanho do texto" style="font:700 1rem var(--f-display)">Aa</button><button class="avbtn" id="openProfile" aria-label="Meu perfil" title="Meu perfil" hidden></button>
+</div>
+  </header>
+  <main id="view" aria-live="polite"></main>
+</div>
+<nav class="tabs" id="nav" aria-label="Navegação principal"><div class="in" id="navin"></div></nav>
+
+<div class="overlay" id="sheetOv" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <header><h2 id="sheetTitle"></h2><button class="iconbtn" data-close aria-label="Fechar">✕</button></header>
+  <div class="body" id="sheetBody"></div></div></div>
+
+<div class="overlay" id="profOv" hidden><div class="profile" id="profile" role="dialog" aria-modal="true" aria-label="Ficha do personagem"></div></div>
+
+
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+"use strict";
+var KEY="adolesente.v1";
+var RADII=[0,4,8,12,16,24,999];
+var SCREENS={home:"Início",diary:"Diário",suggestion:"Sugestão do dia",friends:"Amigos",profile:"Meu perfil"};
+
+/* ---------- estado padrão ---------- */
+function defaults(){return {
+  profile:{name:"",pronouns:"",done:false,auth:null,textSize:100,avatar:{type:"initial",icon:"star",bg:"",charId:"",zoom:100,y:0},colors:null},
+  theme:{
+    appName:"AdoleSente", tagline:"Um cantinho seu para o dia a dia. Use um pouquinho e vá viver o resto.",
+    brand:"#6C318C",accent:"#892CB0",surface:"#06C300",text:"#06A700",extra:"#EE82EE",ink:"#2b1238",
+    radius:{card:24,button:999,input:12,tile:16}, gloss:true,
+    fonts:{display:"Space Grotesk",body:"Inter",mono:"IBM Plex Mono"}, customFonts:{},
+    logo:"", layout:"auto", logoSize:38, showName:false, heroImg:"", bgImg:"", bubbles:true, scale:100
+  },
+  nav:[{id:"home",label:"Início",on:true},{id:"diary",label:"Diário",on:true},{id:"suggestion",label:"Sugestão",on:true},{id:"friends",label:"Amigos",on:true},{id:"profile",label:"Perfil",on:true}],
+  home:{banner:true,question:true,tiles:true,align:"left"},
+  friends:{title:"Conheça nossos amigos",layout:"grid",cols:2,fit:"contain",ratio:"auto",showRole:true,showBio:false},
+  buttons:[
+    {id:"b1",label:"Meu diário",hint:"Só você lê",target:"diary",color:"brand",w:6},
+    {id:"b2",label:"Sugestão do dia",hint:"Algo para fazer longe da tela",target:"suggestion",color:"surface",w:3},
+    {id:"b3",label:"Conheça os amigos",hint:"4 perfis",target:"friends",color:"extra",w:3}
+  ],
+  characters:[
+    {id:"c1",name:"Estéfani",role:"A criativa",bio:"Transforma qualquer sobra em colagem. Sempre tem uma ideia nova guardada no bolso.",traits:["curiosa","artista","bem-humorada"],likes:"Tesoura, revistas velhas e glitter.",color:"#892CB0",img:"",quote:"Toda sobra vira uma ideia.",fields:[{k:"Idade",v:"12 anos"}]},
+    {id:"c2",name:"Caio",role:"O explorador",bio:"Gosta de descobrir como as coisas funcionam e de caminhar sem rumo definido.",traits:["aventureiro","observador","leal"],likes:"Mapas, trilhas curtas e fones de ouvido.",color:"#06A700",img:""},
+    {id:"c3",name:"Lia",role:"A ouvinte",bio:"Escuta com atenção e sempre lembra do que você contou. Escreve bilhetes para as amigas.",traits:["empática","calma","atenta"],likes:"Chá, cadernos e playlists longas.",color:"#6C318C",img:""},
+    {id:"c4",name:"Duda",role:"A animada",bio:"Chega rindo e puxa todo mundo para dançar. Também sabe quando é hora de ficar quieta.",traits:["animada","corajosa","divertida"],likes:"Dança, pipoca e filme de comédia.",color:"#EE82EE",img:""}
+  ],
+  suggestions:[
+    {cat:"Colagem",title:"Colagem do seu momento",text:"Junte revistas, papéis e fotos antigas. Monte uma colagem que represente como você está hoje."},
+    {cat:"Desenho",title:"Seu quarto dos sonhos",text:"Desenhe o quarto ideal sem se preocupar com tamanho ou dinheiro. Invente móveis que não existem."},
+    {cat:"Customização",title:"Dê uma cara nova ao caderno",text:"Escolha um caderno ou estojo e decore com adesivos, tecido ou canetinhas. Faça ficar com a sua cara."},
+    {cat:"Música",title:"Playlist de 5 músicas",text:"Monte uma playlist com 5 músicas para um dia de chuva. Depois escute com os olhos fechados."},
+    {cat:"Escrita",title:"Carta para você daqui a um ano",text:"Escreva o que você quer lembrar sobre este momento. Guarde num envelope e marque a data para abrir."},
+    {cat:"Movimento",title:"Dez minutos lá fora",text:"Dê uma volta no quarteirão ou no quintal e procure três coisas que você nunca tinha reparado."},
+    {cat:"Cozinha",title:"Lanche montado por você",text:"Com ajuda de um adulto, invente um lanche com ingredientes que você já tem em casa. Dê um nome a ele."},
+    {cat:"Artesanato",title:"Pulseira de amizade",text:"Faça uma pulseira de linha ou miçanga para dar a alguém de quem você gosta."},
+    {cat:"Jogo",title:"Caça ao tesouro em casa",text:"Esconda um objeto pequeno e escreva três pistas para quem for procurar. Peça para alguém da família tentar achar."},
+    {cat:"Natureza",title:"Coleção de folhas",text:"Recolha folhas de formatos diferentes no caminho. Cole num caderno e escreva do que cada uma lembra."},
+    {cat:"Leitura",title:"Dez páginas de um livro",text:"Escolha um livro ou gibi e leia dez páginas sem pressa. Depois conte para alguém o que aconteceu."},
+    {cat:"Gratidão",title:"Três coisas boas do dia",text:"Escreva ou desenhe três coisas boas que aconteceram hoje, mesmo as pequenas. Guarde numa caixinha."},
+    {cat:"Amizade",title:"Bilhete para uma amiga",text:"Escreva um bilhete curto e bonito para alguém de quem você gosta. Decore com desenhos e entregue pessoalmente."},
+    {cat:"Desenho",title:"Autorretrato de olhos fechados",text:"Feche os olhos e desenhe o seu rosto de memória. Depois abra e acrescente os detalhes que faltaram."},
+    {cat:"Música",title:"Instrumento com o que tem em casa",text:"Use potes, colheres de pau e elásticos para inventar um instrumento. Crie um ritmo e dê um nome a ele."},
+    {cat:"Organização",title:"Arrume um cantinho",text:"Escolha uma gaveta ou prateleira e deixe do seu jeito. Separe o que você quer guardar e o que pode doar."},
+    {cat:"Movimento",title:"Coreografia de uma música",text:"Escolha uma música de que você gosta e invente quatro passos. Ensine para alguém ou grave só para você lembrar."},
+    {cat:"Escrita",title:"História em cinco frases",text:"Invente uma história com começo, meio e fim em apenas cinco frases. Os personagens podem ser bichos ou objetos."},
+    {cat:"Cozinha",title:"Suco ou limonada especial",text:"Com ajuda de um adulto, misture frutas, gelo e folhinhas de hortelã. Invente o nome da bebida e decore o copo."},
+    {cat:"Colagem",title:"Mural dos sonhos",text:"Recorte imagens e palavras de que você gosta e monte um mural com o que quer viver no próximo ano."},
+    {cat:"Artesanato",title:"Marcador de página",text:"Faça um marcador de papel ou tecido com desenho, franjas ou uma frase. Use no livro que você está lendo."},
+    {cat:"Natureza",title:"Olhe para o céu",text:"Deite ou sente num lugar seguro e observe as nuvens por cinco minutos. Desenhe a forma mais engraçada que você viu."},
+    {cat:"Jogo",title:"Mímica em família",text:"Escreva nomes de filmes, bichos e profissões em papeizinhos. Sorteiem e façam mímica até todo mundo adivinhar."},
+    {cat:"Customização",title:"Personalize uma garrafa",text:"Com tinta ou adesivos que lavam, decore a sua garrafa de água. Escreva o seu nome de um jeito diferente."}
+  ],
+  questions:[
+    "Qual filme você assistiria de novo hoje?","Qual hobby você gostaria de começar?","Qual música está grudada na sua cabeça?",
+    "O que fez você rir nesta semana?","Qual é o seu lugar favorito para ficar sozinho(a)?","Se pudesse aprender qualquer coisa em um dia, o que seria?",
+    "Qual cheiro lembra um lugar bom para você?","Quem você gostaria de agradecer hoje?",
+    "Qual livro ou história você leria de novo?",
+    "Qual comida deixa você feliz só de pensar?",
+    "Qual foi a melhor parte do seu dia até agora?",
+    "Se você tivesse um superpoder por um dia, qual seria?",
+    "Qual é a sua lembrança favorita da infância?",
+    "Com quem você gostaria de passar uma tarde inteira?",
+    "Qual desenho ou série você nunca cansa de ver, e por quê?",
+    "O que você faria com um dia livre, sem nenhuma obrigação?",
+    "Qual cor representa como você está se sentindo hoje?",
+    "Qual foi a coisa mais legal que você aprendeu esta semana?",
+    "Qual lugar do mundo você quer conhecer?",
+    "Qual música você colocaria para animar um dia ruim?",
+    "Qual pequeno hábito você gostaria de criar?",
+    "Qual jogo ou brincadeira você nunca enjoa?",
+    "O que você diria para você mesmo(a) de um ano atrás?",
+    "Qual bicho de estimação você teria, e que nome daria a ele?"
+  ],
+  texts:{welcomeTitle:"Oi! Que bom te ver por aqui",welcomeBody:"Antes de começar, conte como você quer ser chamado(a).",
+    nudge:"Já fez? Então feche o app e aproveite o resto do dia."},
+  welcome:{on:true,pos:"afterBanner",text:"Bem-vindo(a) ao seu cantinho, {nome}! Respire fundo, escreva, desenhe e curta o seu dia.",bg:"#EE82EE",autoText:true,color:"#2b1238",font:"",size:22,bold:true,ta:"left",w:100,h:110,pad:18,shape:"",al:"center",off:0,img:"",imgOnly:false,fit:"cover"},
+  diaryStyle:{type:"ruled",paper:"#FFFDF3",lines:"#9CC7E6",mline:"#E58C8C",ink:"#2B2F4A",lh:32,fs:18,margin:true,holes:true,paperImg:""},
+  answers:[], diary:null, loggedOut:false, tut:{asked:false}
+};}
+
+var S=load();
+(function(){ // quem já tinha perfil antes do tutorial não recebe o convite de primeiro acesso
+  try{var r=JSON.parse(localStorage.getItem(KEY)||"null");if(r&&r.profile&&r.profile.done&&!r.tut){S.tut={asked:true};localStorage.setItem(KEY,JSON.stringify(S))}}catch(e){}
+})();
+(function(){ // padroniza os pronomes "Ele/Dele" nas fichas dos personagens já salvas
+  var fix=function(x){return typeof x==="string"?x.replace(/\b(?:elde|ele)\s*\/\s*dele\b/gi,"Ele/Dele"):x},ch=false;
+  (S.characters||[]).forEach(function(c){Object.keys(c).forEach(function(k){
+    if(typeof c[k]==="string"){var n=fix(c[k]);if(n!==c[k]){c[k]=n;ch=true}}
+    else if(Array.isArray(c[k]))c[k].forEach(function(it,i){
+      if(typeof it==="string"){var n=fix(it);if(n!==it){c[k][i]=n;ch=true}}
+      else if(it&&typeof it==="object")Object.keys(it).forEach(function(q){var n=fix(it[q]);if(n!==it[q]){it[q]=n;ch=true}})})})});
+  if(ch)try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+})();
+(function(){ // começa como novo usuário: limpa só os dados pessoais, uma única vez
+  if((S.resetVer||0)>=1)return;var d=defaults();
+  S.profile=d.profile;S.answers=[];S.diary=null;S.diaryStyle=d.diaryStyle;S.resetVer=1;
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+})();
+(function(){ // inclui no conteúdo já salvo as novas ideias e perguntas, sem apagar o que a pessoa editou
+  if((S.contentVer||1)>=2)return;var d=defaults();
+  d.questions.forEach(function(q){if(S.questions.indexOf(q)<0)S.questions.push(q)});
+  d.suggestions.forEach(function(x){if(!S.suggestions.some(function(y){return y.title===x.title}))S.suggestions.push(x)});
+  S.contentVer=2;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+})();
+if(!S.nav.some(function(n){return n.id==="profile"}))S.nav.push({id:"profile",label:"Perfil",on:true});
+if(S.profile.avatar&&S.profile.avatar.type==="img"){S.profile.avatar.type="initial"}if(S.profile.avatar)S.profile.avatar.img="";
+S.buttons.forEach(function(b){if(!b.w)b.w=b.wide?6:3;if(!b.h)b.h=116;if(b.off==null)b.off=0});
+S.characters.forEach(function(c){if(!c.fields)c.fields=[];if(c.quote==null)c.quote=""});
+function load(){try{var r=localStorage.getItem(KEY);if(r){return merge(defaults(),JSON.parse(r));}}catch(e){}return defaults();}
+function merge(base,over){ // mescla em profundidade; listas do usuário substituem as padrão
+  if(Array.isArray(base)||typeof base!=="object"||base===null) return over===undefined?base:over;
+  var out={};Object.keys(base).forEach(function(k){out[k]=(over&&k in over)?merge(base[k],over[k]):base[k]});
+  if(over)Object.keys(over).forEach(function(k){if(!(k in out))out[k]=over[k]});return out;}
+var saveT;
+function save(){clearTimeout(saveT);saveT=setTimeout(function(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("Sem espaço para salvar. Use imagens menores ou remova algumas.")}},250);}
+function saveNow(){clearTimeout(saveT);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function uid(){return "x"+Math.random().toString(36).slice(2,8)}
+var $=function(s,r){return (r||document).querySelector(s)};
+function toast(t){var el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){el.hidden=true},2600)}
+
+/* ---------- tema ---------- */
+function lum(hex){var h=hex.replace("#","");if(h.length===3)h=h.split("").map(function(c){return c+c}).join("");
+  var n=parseInt(h,16),r=n>>16&255,g=n>>8&255,b=n&255;
+  var f=function(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(r)+.7152*f(g)+.0722*f(b)}
+function onColor(hex){try{var L=lum(hex);return (1.05/(L+.05))>=((L+.05)/.052)?"#ffffff":"#10031a"}catch(e){return"#fff"}}
+function col(k){var c=S.profile.colors;return (c&&c[k])||S.theme[k]}
+function resolve(c){return {brand:col("brand"),accent:col("accent"),surface:col("surface"),text:S.theme.text,extra:col("extra")}[c]||c}
+function mixHex(a,b,t){function g(h){h=h.replace("#","");if(h.length===3)h=h.split("").map(function(c){return c+c}).join("");var n=parseInt(h,16);return[n>>16&255,n>>8&255,n&255]}var A=g(a),B=g(b);return "#"+A.map(function(v,i){return Math.round(v+(B[i]-v)*t).toString(16).padStart(2,"0")}).join("")}
+var fontLink;
+function gfLink(name,weights){return "https://fonts.googleapis.com/css2?family="+encodeURIComponent(name).replace(/%20/g,"+")+(weights?":wght@400;500;700":"")+"&display=swap"}
+function ensureFont(name){
+  if(!name||ensureFont.done[name])return;ensureFont.done[name]=1;
+  var l=document.createElement("link");l.rel="stylesheet";l.href=gfLink(name,true);
+  l.onerror=function(){var l2=document.createElement("link");l2.rel="stylesheet";l2.href=gfLink(name,false);document.head.appendChild(l2)};
+  document.head.appendChild(l);}
+ensureFont.done={"Space Grotesk":1,"Inter":1,"IBM Plex Mono":1};
+function applyTheme(){
+  var t=S.theme,r=document.documentElement.style;
+  ["brand","accent","surface","text","extra"].forEach(function(k){r.setProperty("--"+k,col(k))});r.setProperty("--on-extra",onColor(col("extra")));
+  r.setProperty("--ink","#f1e6f8");r.setProperty("--head","color-mix(in srgb,"+col("brand")+" 38%,#ffffff)");
+  r.setProperty("--on-brand",onColor(col("brand")));r.setProperty("--on-accent",onColor(col("accent")));r.setProperty("--on-surface",onColor(col("surface")));
+  r.setProperty("--r-card",t.radius.card+"px");r.setProperty("--r-btn",t.radius.button+"px");
+  r.setProperty("--r-input",t.radius.input+"px");r.setProperty("--r-tile",t.radius.tile+"px");
+  document.body.classList.toggle("flat",!t.gloss);
+  document.body.classList.toggle("nobubbles",!t.bubbles);
+  r.setProperty("--scale",((t.scale||100)/100)*((S.profile.textSize||100)/100));r.setProperty("--logo-h",(t.logoSize||38)+"px");
+  var bg=$(".bg");if(bg){if(t.bgImg){bg.style.background="linear-gradient(color-mix(in srgb,var(--bg) 45%,transparent),color-mix(in srgb,var(--bg) 45%,transparent)),url("+t.bgImg+") center/cover"}else{bg.style.background=""}}
+  var css="";
+  ["display","body","mono"].forEach(function(role){
+    var cf=t.customFonts[role],fam;
+    if(cf&&cf.data){fam='"AS-'+role+'"';css+='@font-face{font-family:'+fam+';src:url('+cf.data+');font-display:swap}';}
+    else{fam='"'+t.fonts[role]+'"';ensureFont(t.fonts[role]);}
+    var fb=role==="mono"?"ui-monospace,monospace":(role==="display"?"system-ui,sans-serif":"system-ui,sans-serif");
+    r.setProperty("--f-"+role,fam+","+fb);
+  });
+  var wf=t.customFonts.welcome;if(wf&&wf.data)css+='@font-face{font-family:"AS-welcome";src:url('+wf.data+');font-display:swap}';
+  if(S.welcome&&S.welcome.font)ensureFont(S.welcome.font);
+  var st=$("#cfonts");if(!st){st=document.createElement("style");st.id="cfonts";document.head.appendChild(st)}st.textContent=css;
+  document.title=t.appName||"AdoleSente";
+  applyMode();renderBrand();renderHeaderAvatar();
+}
+function applyMode(){var m=S.theme.layout||"auto",mob=m==="mobile"||(m==="auto"&&window.innerWidth<700);document.body.classList.toggle("mob",mob)}
+window.addEventListener("resize",applyMode);
+function renderBrand(){
+  var t=S.theme,el=$("#brand");
+  el.innerHTML=(t.logo?'<img src="'+esc(t.logo)+'" alt="'+(t.showName?"":esc(t.appName))+'">':"")+((!t.logo||t.showName)?'<b>'+esc(t.appName)+'</b>':"");
+}
+
+/* ---------- navegação ---------- */
+var ICON={
+  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+  diary:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/>',
+  suggestion:'<path d="M12 3l2.4 5.6L20 9.3l-4.4 3.8L17 19l-5-3-5 3 1.4-5.9L4 9.3l5.6-.7z"/>',
+  profile:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+  friends:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"/><circle cx="17.5" cy="9" r="2.6"/><path d="M17 14.2c2.6.2 4.5 2.1 4.5 5"/>'};
+var cur=(location.hash||"").replace("#","");if(!SCREENS[cur])cur="home";
+function navOn(id){var n=S.nav.find(function(x){return x.id===id});return id==="home"||!n||n.on!==false}
+function go(id){document.body.classList.remove("typing");if(!SCREENS[id]||!navOn(id))id="home";cur=id;try{history.replaceState(null,"","#"+id)}catch(e){}renderNav();renderView();window.scrollTo(0,0)}
+function renderNav(){
+  $("#navin").innerHTML=S.nav.filter(function(n){return n.on!==false||n.id==="home"}).map(function(n){
+    return '<button data-go="'+n.id+'"'+(n.id===cur?' aria-current="page"':"")+'>'+(n.icon?'<img src="'+esc(n.icon)+'" alt="">':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[n.id]+'</svg>')+esc(n.label)+'</button>';}).join("");
+  $("#nav").hidden=!S.profile.done||S.loggedOut;
+}
+
+/* ---------- telas ---------- */
+var sess={q:null,sug:null};
+function pickQ(force){var n=S.questions.length;if(!n)return"";
+  if(sess.q===null||force){var saved=null;try{saved=sessionStorage.getItem("as.q")}catch(e){}
+    var i=(!force&&saved!==null)?+saved:Math.floor(Math.random()*n);
+    if(force&&n>1){var j;do{j=Math.floor(Math.random()*n)}while(j===sess.q);i=j}
+    sess.q=i%n;try{sessionStorage.setItem("as.q",String(sess.q))}catch(e){}}
+  return S.questions[sess.q%n]}
+function dayIndex(){var d=new Date();return Math.floor((d-new Date(d.getFullYear(),0,0))/864e5)}
+
+function renderView(){
+  var v=$("#view");
+  if(S.loggedOut&&S.profile.done){viewLoggedOut(v);return}
+  if(!S.profile.done){v.innerHTML=viewOnboard();bindOnboard();return}
+  ({home:viewHome,diary:viewDiary,suggestion:viewSug,friends:viewFriends,profile:viewProfile})[cur](v);
+}
+
+function viewLoggedOut(v){
+  var A=S.profile.auth,nm=S.profile.name?', '+esc(S.profile.name):'';
+  function wipeHTML(){return '<details><summary class="muted" style="cursor:pointer">Entrar como outra pessoa</summary><p class="msg" style="margin:8px 0">Apaga o nome, a senha, o diário, as respostas e as escolhas de cores deste aparelho para começar do zero.</p><button class="btn danger small" id="lgWipe">Apagar tudo e começar de novo</button></details>'}
+  function bindWipe(){var w=$("#lgWipe");w.onclick=function(){if(w.dataset.s!=="1"){w.dataset.s="1";w.textContent="Toque de novo para apagar tudo";return}
+    var d=defaults();S.profile=d.profile;S.answers=[];S.diary=null;S.diaryStyle=d.diaryStyle;S.loggedOut=false;D.key=null;D.notes=[];D.sel=null;D.pending=null;sess={q:null,sug:null};
+    saveNow();applyTheme();renderNav();renderHeaderAvatar();go("home")}}
+  function enterApp(){S.loggedOut=false;saveNow();renderNav();renderHeaderAvatar();go("home")}
+  if(!A){ /* perfil criado antes do login: define a senha agora */
+    v.innerHTML='<section class="glass stack"><h1>Olá'+nm+'!</h1><p>Agora o perfil tem senha de acesso. Crie a sua para entrar.</p>'+
+     '<label class="f">Crie uma senha de acesso<input id="lp1" type="password" autocomplete="new-password"></label><label class="f">Repita a senha<input id="lp2" type="password" autocomplete="new-password"></label><p class="err" id="lerr"></p>'+
+     '<button class="btn" type="button" id="lgIn">Criar senha e entrar</button>'+wipeHTML()+'</section>';
+    var go1=function(){var a=$("#lp1").value,b=$("#lp2").value,er=$("#lerr");
+      if(a.length<4){er.textContent="Use pelo menos 4 caracteres.";return}if(a!==b){er.textContent="As senhas são diferentes.";return}
+      Promise.all([makeAuth(a),makeRecovery()]).then(function(r){var au=r[0],rec=r[1];
+        acctCode(v,rec,function(){au.rsalt=rec.rsalt;au.rhash=rec.rhash;S.profile.auth=au;enterApp()})},function(){er.textContent="Não foi possível criar a senha."})};
+    $("#lgIn").onclick=go1;$("#lp2").onkeydown=function(e){if(e.key==="Enter")go1()};bindWipe();return}
+  v.innerHTML='<section class="glass stack"><h1>Até logo'+nm+'!</h1><p>Sua sessão foi encerrada. Seus dados continuam salvos neste aparelho. Digite sua senha para voltar.</p>'+
+   '<label class="f">Senha de acesso<input id="lpw" type="password" autocomplete="current-password"></label><p class="err" id="lerr"></p>'+
+   '<button class="btn" type="button" id="lgIn">Entrar</button>'+
+   '<details><summary class="muted" style="cursor:pointer">Esqueci a senha</summary><div class="stack" style="margin-top:10px">'+
+   (A.rhash?'<p class="msg">Digite a chave de acesso que você anotou e escolha uma senha nova. Seu diário e suas respostas continuam como estão.</p>'+
+    '<label class="f">Chave de acesso<input id="lcode" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX"></label>'+
+    '<label class="f">Nova senha<input id="lr1" type="password" autocomplete="new-password"></label><label class="f">Repita a nova senha<input id="lr2" type="password" autocomplete="new-password"></label><p class="err" id="lrerr"></p>'+
+    '<button class="btn" type="button" id="lrGo">Criar nova senha e entrar</button>':'<p class="msg">Sem a chave de acesso não dá para recuperar a senha. Só dá para começar do zero.</p>')+'</div></details>'+wipeHTML()+'</section>';
+  var tryIn=function(){var er=$("#lerr");pwHash($("#lpw").value,A.salt).then(function(h){if(h===A.hash)enterApp();else er.textContent="Senha incorreta."},function(){er.textContent="Não foi possível entrar."})};
+  $("#lgIn").onclick=tryIn;$("#lpw").onkeydown=function(e){if(e.key==="Enter")tryIn()};
+  if(A.rhash)$("#lrGo").onclick=function(){var c=normCode($("#lcode").value),a=$("#lr1").value,b=$("#lr2").value,er=$("#lrerr");
+    if(c.length!==16){er.textContent="A chave tem 16 letras e números.";return}
+    if(a.length<4){er.textContent="Use pelo menos 4 caracteres na senha nova.";return}if(a!==b){er.textContent="As senhas novas são diferentes.";return}
+    pwHash(c,A.rsalt).then(function(h){if(h!==A.rhash){er.textContent="Chave de acesso incorreta.";return}
+      return makeAuth(a).then(function(n){n.rsalt=A.rsalt;n.rhash=A.rhash;S.profile.auth=n;toast("Senha nova definida.");enterApp()})},function(){er.textContent="Não foi possível recuperar."})};
+  bindWipe();
+}
+function viewOnboard(){
+  var P=S.profile,opts=["ela/dela","ele/dele","elu/delu","prefiro não dizer"];
+  return '<section class="glass stack"><h1>'+esc(S.texts.welcomeTitle)+'</h1><p>'+esc(S.texts.welcomeBody)+'</p>'+
+  '<div id="onb" class="stack"><label class="f">Como você quer ser chamado(a)?<input id="onName" maxlength="30" autocomplete="off" value="'+esc(P.name)+'"></label>'+
+  '<label class="f">Pronomes<select id="onPro">'+opts.map(function(o){return '<option>'+o+'</option>'}).join("")+'<option value="outro">outro</option></select></label>'+
+  '<label class="f" id="onOtherW" hidden>Escreva o seu<input id="onOther" maxlength="30"></label>'+
+  '<label class="f">Crie uma senha de acesso<input id="onPw1" type="password" autocomplete="new-password"></label>'+
+  '<label class="f">Repita a senha<input id="onPw2" type="password" autocomplete="new-password"></label><p class="err" id="onErr"></p>'+
+  '<button class="btn" type="button" id="onGo">Criar meu perfil</button></div>'+
+  '<p class="muted">Seus dados ficam só neste aparelho. A senha serve para você voltar ao seu perfil depois de encerrar a sessão.</p></section>';}
+function bindOnboard(){
+  var sel=$("#onPro");sel.onchange=function(){$("#onOtherW").hidden=sel.value!=="outro"};
+  var enter=function(){var nm=$("#onName").value.trim();if(!nm){$("#onName").focus();toast("Escreva como quer ser chamado(a).");return}
+    var p=sel.value==="outro"?($("#onOther").value||"").trim():sel.value,a=$("#onPw1").value,b=$("#onPw2").value,er=$("#onErr");
+    if(a.length<4){er.textContent="Use pelo menos 4 caracteres na senha.";return}
+    if(a!==b){er.textContent="As senhas são diferentes.";return}
+    er.textContent="";
+    Promise.all([makeAuth(a),makeRecovery()]).then(function(r){var au=r[0],rec=r[1];
+      acctCode($("#view"),rec,function(){au.rsalt=rec.rsalt;au.rhash=rec.rhash;S.profile.name=nm;S.profile.pronouns=p;S.profile.auth=au;S.profile.done=true;S.loggedOut=false;saveNow();renderNav();renderHeaderAvatar();toast("Perfil criado.");go("home");setTimeout(tutAsk,400)})},
+      function(){er.textContent="Não foi possível criar o perfil."})};
+  $("#onGo").onclick=enter;
+  [$("#onName"),$("#onOther"),$("#onPw1"),$("#onPw2")].forEach(function(i){i.onkeydown=function(e){if(e.key==="Enter")enter()}});
+}
+
+function welcomeHTML(){
+  var W=S.welcome;if(!W||!W.on)return"";
+  var nm=esc(S.profile.name||""),raw=String(W.text||"").replace(/\{nome\}/gi,S.profile.name||"");
+  var txt=esc(W.text).replace(/\{nome\}/gi,nm).replace(/\n/g,"<br>");
+  var rad=W.shape===""?"var(--r-card)":W.shape+"px";
+  var ml=W.al==="left"?"0":"auto",mr=W.al==="right"?"0":"auto";
+  var box='width:'+(+W.w)+'%;max-width:100%;margin:'+(+W.off)+'px '+mr+' 0 '+ml+';border-radius:'+rad+';';
+  if(W.img&&W.imgOnly)return '<aside class="welcome onlyimg" style="'+box+'"><img src="'+esc(W.img)+'" alt="'+esc(raw)+'"></aside>';
+  var fg=W.autoText?onColor(W.img?"#000000":W.bg):W.color;
+  var cf=S.theme.customFonts.welcome;
+  var fam=(cf&&cf.data)?'"AS-welcome"':(W.font?'"'+esc(W.font)+'"':"var(--f-display)");
+  var al={left:"flex-start",center:"center",right:"flex-end"}[W.ta]||"flex-start";
+  return '<aside class="welcome'+(W.img?' hasimg':"")+'" style="'+box+'min-height:'+(+W.h)+'px;padding:'+(+W.pad)+'px;background-color:'+esc(W.bg)+';'+(W.img?'background-image:url('+esc(W.img)+');background-size:'+(W.fit==="contain"?"contain":"cover")+';':"")+
+    'color:'+esc(fg)+';font-family:'+fam+',system-ui,sans-serif;font-size:calc('+(+W.size)+'px * var(--scale));font-weight:'+(W.bold?800:500)+';text-align:'+esc(W.ta)+';align-items:'+al+'"><span>'+txt+'</span></aside>';
+}
+function viewHome(v){
+  var t=S.theme,q=pickQ(false),last=S.answers[S.answers.length-1];
+  var tiles=S.buttons.map(function(b){
+    var w=+b.w||(b.wide?6:3),h=+b.h||116,shape=b.shape||"",c=resolve(b.color),on=onColor(c);
+    var circle=shape==="circle",rad=shape===""?"var(--r-tile)":(circle?"50%":shape+"px");
+    var al={start:"start",center:"center",end:"end"}[b.al]||"stretch";
+    var lp={top:"flex-start",center:"center",bottom:"flex-end"}[b.lp]||"flex-end";
+    var ta=b.ta||(circle?"center":"left");
+    var st='--c:'+esc(c)+';--w:'+w+';--h:'+h+'px;--rad:'+rad+';color:'+(b.img&&!b.imgOnly?"#fff":on)+';justify-self:'+al+';justify-content:'+lp+';text-align:'+ta+';align-items:'+({left:"flex-start",center:"center",right:"flex-end"}[ta]||"flex-start")+';'+(b.off?'margin-top:'+(+b.off)+'px;':"")+(b.img?'background-image:url('+esc(b.img)+');':"");
+    if(circle&&al==="stretch")st+='justify-self:stretch;';
+    var cls='tile'+(circle?' circle':'')+(b.img?' hasimg':'')+(b.img&&b.imgOnly?' imgonly':'');
+    var inner=(b.img&&b.imgOnly)?'<span class="sr">'+esc(b.label)+'</span>':'<span class="lbl-in">'+esc(b.label)+(b.hint?'<br><small>'+esc(b.hint)+'</small>':"")+'</span>';
+    if(b.target==="url")return '<a class="'+cls+'" style="'+st+'" href="'+esc(b.url||"#")+'" target="_blank" rel="noopener">'+inner+'</a>';
+    return '<button class="'+cls+'" style="'+st+'" data-go="'+esc(b.target)+'">'+inner+'</button>';}).join("");
+  var parts=[];
+  if(S.home.banner)parts.push('<section class="hero'+(t.heroImg?' has-img':"")+'"'+(' style="text-align:'+esc(S.home.align)+';'+(t.heroImg?'background-image:url('+esc(t.heroImg)+')':"")+'"')+'>'+
+     '<h1>Oi, <span class="hi">'+esc(S.profile.name||"amigo(a)")+'</span>!</h1><p>'+esc(t.tagline)+'</p>'+
+     (S.profile.pronouns?'<p class="muted" style="color:inherit;opacity:.8;font-size:.85rem">'+esc(S.profile.pronouns)+'</p>':"")+'</section>');
+  if(S.home.question)parts.push('<section class="glass stack" aria-labelledby="qh"><div class="lbl" id="qh">Pergunta desta sessão</div>'+
+     '<h2>'+esc(q)+'</h2>'+
+     '<textarea id="ans" rows="3" aria-label="Sua resposta" placeholder="Escreva aqui, sem pressa"></textarea>'+
+     '<div class="row"><button class="btn" id="saveAns">Guardar resposta</button><button class="btn ghost" id="newQ">Outra pergunta</button></div>'+
+     (last?'<p class="msg">Última resposta guardada: “'+esc(last.a.slice(0,90))+(last.a.length>90?"…":"")+'”</p>':"")+'</section>');
+  if(S.home.tiles)parts.push(S.buttons.length?'<section class="tiles" aria-label="Atalhos">'+tiles+'</section>':'<div class="glass empty"><b>Sem atalhos ainda</b>Adicione botões no Estúdio.</div>');
+  var wh=welcomeHTML();
+  if(wh){var at={top:0,afterBanner:1,afterQuestion:2,bottom:99}[S.welcome.pos];if(at==null)at=1;parts.splice(Math.min(at,parts.length),0,wh)}
+  v.innerHTML='<div class="stack">'+parts.join("")+'</div>';
+  if(!S.home.question)return;
+  $("#newQ").onclick=function(){pickQ(true);viewHome(v)};
+  $("#saveAns").onclick=function(){var a=$("#ans").value.trim();if(!a){toast("Escreva algo antes de guardar.");return}
+    S.answers.push({q:q,a:a,d:new Date().toISOString().slice(0,10)});save();toast("Resposta guardada.");viewHome(v)};
+}
+
+function viewSug(v){
+  var n=S.suggestions.length;
+  if(!n){v.innerHTML='<div class="glass empty"><b>Nenhuma sugestão cadastrada</b>Adicione ideias no Estúdio, aba Conteúdo.</div>';return}
+  if(sess.sug===null)sess.sug=dayIndex()%n;
+  var s=S.suggestions[sess.sug%n];
+  v.innerHTML='<section class="glass stack"><div class="lbl">Sugestão do dia · '+esc(s.cat)+'</div><h1>'+esc(s.title)+'</h1><p>'+esc(s.text)+'</p>'+
+   '<div class="row"><button class="btn surface" id="nextSug">Outra ideia</button><button class="btn ghost" id="doneSug">Vou fazer</button></div>'+
+   '<p class="msg" id="nudge" hidden>'+esc(S.texts.nudge)+'</p></section>';
+  $("#nextSug").onclick=function(){sess.sug=(sess.sug+1)%n;viewSug(v)};
+  $("#doneSug").onclick=function(){$("#nudge").hidden=false};
+}
+
+function figHTML(c,extra){
+  var F=S.friends,fit=c.fit||F.fit,fixed=F.ratio!=="auto";
+  if(!c.img)return '<div class="fig ph" style="--c:'+esc(c.color)+'">'+esc((c.name||"?").charAt(0).toUpperCase())+'</div>';
+  return '<div class="fig'+(fixed?' fixed':'')+'" style="--c:'+esc(c.color)+(fixed?';--ratio:'+esc(F.ratio)+';--fit:'+esc(fit):"")+'"><img src="'+esc(c.img)+'" alt="'+esc(c.name)+'"></div>';}
+var AVI={
+  star:'<path d="M12 3l2.4 5.6L20 9.3l-4.4 3.8L17 19l-5-3-5 3 1.4-5.9L4 9.3l5.6-.7z"/>',
+  heart:'<path d="M12 20s-7-4.4-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.6-9 9-9 9z"/>',
+  moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+  cloud:'<path d="M7 18a4 4 0 0 1-.5-7.97A6 6 0 0 1 18 9.5 4.3 4.3 0 0 1 17.5 18z"/>',
+  music:'<path d="M9 18V6l11-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
+  flower:'<circle cx="12" cy="12" r="2.6"/><circle cx="12" cy="6.2" r="2.6"/><circle cx="12" cy="17.8" r="2.6"/><circle cx="6.2" cy="12" r="2.6"/><circle cx="17.8" cy="12" r="2.6"/>',
+  paw:'<circle cx="6" cy="10" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><path d="M12 12c-3 0-5 3-5 5a2 2 0 0 0 2 2c1.5 0 2-.7 3-.7s1.5.7 3 .7a2 2 0 0 0 2-2c0-2-2-5-5-5z"/>',
+  leaf:'<path d="M5 19c0-9 5-14 15-14 0 10-5 15-14 15M5 19l8-8"/>',
+  bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+  smile:'<circle cx="12" cy="12" r="9"/><path d="M8 14a5 5 0 0 0 8 0M9 9.5h.01M15 9.5h.01"/>'};
+var AVNAMES={star:"Estrela",heart:"Coração",moon:"Lua",sun:"Sol",cloud:"Nuvem",music:"Música",flower:"Flor",paw:"Patinha",leaf:"Folha",bolt:"Raio",smile:"Sorriso"};
+function charCrop(c,A){var y=+A.y||0,z=(+A.zoom||100)/100;
+  return '<img src="'+esc(c.img)+'" alt="" style="object-position:50% '+y+'%;transform:scale('+z+');transform-origin:50% '+y+'%">'}
+function avatarHTML2(size){
+  var A=S.profile.avatar||{type:"initial"},bg=A.bg||col("brand"),fg=onColor(bg),inner;
+  var ch=A.type==="char"?S.characters.find(function(c){return c.id===A.charId&&c.img}):null;
+  if(ch)inner=charCrop(ch,A);
+  else if(A.type==="icon"&&AVI[A.icon])inner='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+AVI[A.icon]+'</svg>';
+  else inner=esc((S.profile.name||"?").trim().charAt(0).toUpperCase()||"?");
+  return '<span class="av" style="--s:'+(size||44)+'px;background:'+esc(bg)+';color:'+fg+'">'+inner+'</span>';}
+function renderHeaderAvatar(){var b=$("#openProfile");if(!b)return;b.hidden=!S.profile.done||S.loggedOut||!navOn("profile");b.innerHTML=avatarHTML2(44)}
+var PALS=[{n:"Roxo original",c:null},{n:"Oceano",c:{brand:"#0B5FA5",accent:"#1E88E5",surface:"#00C2D1",extra:"#7FDBFF"}},
+ {n:"Pôr do sol",c:{brand:"#B23A48",accent:"#E5703A",surface:"#FFB84D",extra:"#FF8FB1"}},{n:"Floresta",c:{brand:"#2D6A4F",accent:"#40916C",surface:"#95D5B2",extra:"#F2CC8F"}},
+ {n:"Chiclete",c:{brand:"#C2185B",accent:"#E91E8C",surface:"#FFD6EC",extra:"#EE82EE"}},{n:"Meia-noite",c:{brand:"#3B2F7F",accent:"#6C5CE7",surface:"#00D4A6",extra:"#A29BFE"}}];
+function samePal(c){var cur=S.profile.colors;if(!c)return !cur;if(!cur)return false;return ["brand","accent","surface","extra"].every(function(k){return cur[k]===c[k]})}
+function charPane(A){
+  var list=S.characters.filter(function(c){return c.img});
+  if(!list.length)return '<p class="msg">Nenhum personagem tem imagem ainda. Adicione uma em Estúdio > Personagens.</p>';
+  return '<p class="msg">Usa a foto do personagem, mostrando do torso para cima.</p><div class="icons" role="group" aria-label="Escolha um personagem">'+list.map(function(c){
+    return '<button type="button" data-char="'+esc(c.id)+'" aria-pressed="'+(A.charId===c.id)+'" aria-label="'+esc(c.name)+'" title="'+esc(c.name)+'" style="overflow:hidden"><span class="av" style="--s:100%;border-radius:0;background:'+esc(A.bg||c.color)+'">'+charCrop(c,A)+'</span></button>'}).join("")+'</div>'+
+    '<label class="f">Aproximação <output>'+(+A.zoom||100)+'%</output><input type="range" id="pfZoom" min="100" max="300" step="5" value="'+(+A.zoom||100)+'"></label>'+
+    '<label class="f">Posição vertical <output>'+(+A.y||0)+'%</output><input type="range" id="pfY" min="0" max="100" step="2" value="'+(+A.y||0)+'"></label>'}
+function pfCommit(){save();applyTheme()}
+function viewProfile(v){
+  var P=S.profile,A=P.avatar,T=A.type,opts=["ela/dela","ele/dele","elu/delu","prefiro não dizer"],isOther=P.pronouns&&opts.indexOf(P.pronouns)<0;
+  var bgs=[["Marca",col("brand")],["Destaque",col("accent")],["Superfície",col("surface")],["Extra",col("extra")]];
+  var pane=T==="icon"?'<div class="icons" role="group" aria-label="Escolha um desenho">'+Object.keys(AVI).map(function(k){return '<button type="button" data-icon="'+k+'" aria-pressed="'+(A.icon===k)+'" aria-label="'+AVNAMES[k]+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+AVI[k]+'</svg></button>'}).join("")+'</div>'
+   :T==="char"?charPane(A)
+   :'<p class="msg">Usa a primeira letra do seu nome.</p>';
+  v.innerHTML='<div class="stack">'+
+   '<section class="glass row" style="flex-wrap:nowrap;gap:16px">'+avatarHTML2(88)+'<div style="min-width:0"><div class="lbl">Meu perfil</div><h1 id="pfShowName" style="overflow-wrap:anywhere">'+esc(P.name||"Sem nome")+'</h1>'+(P.pronouns?'<span class="chip" id="pfShowPro">'+esc(P.pronouns)+'</span>':'<span class="chip" id="pfShowPro" hidden></span>')+'</div></section>'+
+   '<section class="glass stack"><h2>Meu ícone</h2><div class="seg" role="group" aria-label="Tipo de ícone">'+[["initial","Letra"],["icon","Desenho"],["char","Personagem"]].map(function(x){return '<button type="button" data-av="'+x[0]+'" aria-pressed="'+(T===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>'+pane+
+     ('<div class="stack" style="gap:8px"><span class="lbl">Cor do fundo do ícone</span><div class="swrow">'+bgs.map(function(c){return '<button type="button" class="sw" style="background:'+c[1]+'" data-avbg="'+c[1]+'" aria-label="'+c[0]+'"></button>'}).join("")+'<input type="color" id="pfAvBg" value="'+esc(A.bg||col("brand"))+'" aria-label="Escolher outra cor"></div></div>')+
+   '</section>'+
+   '<section class="glass stack"><h2>Nome e pronomes</h2><label class="f">Como quer ser chamado(a)<input id="pfName" maxlength="30" autocomplete="off" value="'+esc(P.name)+'"></label>'+
+     '<label class="f">Pronomes<select id="pfPro">'+opts.map(function(o){return '<option'+(P.pronouns===o?" selected":"")+'>'+o+'</option>'}).join("")+'<option value="outro"'+(isOther?" selected":"")+'>outro</option></select></label>'+
+     '<label class="f" id="pfOtherW"'+(isOther?"":" hidden")+'>Escreva o seu<input id="pfOther" maxlength="30" value="'+esc(isOther?P.pronouns:"")+'"></label></section>'+
+   '<section class="glass stack"><h2>Tamanho do texto</h2><p class="msg">Aumente se ficar mais fácil de ler. Vale para o app inteiro.</p><div class="seg" role="group" aria-label="Tamanho do texto">'+[[100,"Normal"],[125,"Grande"],[150,"Muito grande"],[175,"Enorme"]].map(function(x){return '<button type="button" data-ts="'+x[0]+'" aria-pressed="'+((P.textSize||100)===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>'+
+     '<label class="f">Ajuste fino <output id="tsOut">'+(P.textSize||100)+'%</output><input type="range" id="pfTs" min="90" max="200" step="5" value="'+(P.textSize||100)+'"></label>'+
+     '<p style="font-weight:600">Assim fica o seu texto: o rato roeu a roupa do rei de Roma.</p></section>'+
+   '<section class="glass stack"><h2>Cores da página</h2><div class="palettes">'+PALS.map(function(x,i){var c=x.c||{brand:S.theme.brand,accent:S.theme.accent,surface:S.theme.surface,extra:S.theme.extra};
+      return '<button type="button" class="pal" data-pal="'+i+'" aria-pressed="'+samePal(x.c)+'"><i><b style="background:'+c.brand+'"></b><b style="background:'+c.accent+'"></b><b style="background:'+c.surface+'"></b><b style="background:'+c.extra+'"></b></i>'+x.n+'</button>'}).join("")+'</div>'+
+     '<div class="cols pc">'+[["brand","Principal"],["accent","Destaque"],["surface","Fundos claros"],["extra","Extra"]].map(function(x){return '<label class="f">'+x[1]+'<input type="color" data-pc="'+x[0]+'" value="'+esc(col(x[0]))+'"></label>'}).join("")+'</div>'+
+     '<button type="button" class="btn ghost small" id="pfReset" style="align-self:flex-start">Voltar às cores originais</button></section>'+
+   '<section class="glass stack"><h2>Formato da tela</h2><p class="msg">Escolha como o app aparece neste aparelho.</p><div class="seg" role="group" aria-label="Formato da tela">'+
+     [["mobile","Celular"],["desktop","Computador"],["auto","Automático"]].map(function(x){return '<button type="button" data-lay="'+x[0]+'" aria-pressed="'+((S.theme.layout||"auto")===x[0])+'">'+x[1]+'</button>'}).join("")+'</div></section>'+
+   '<section class="glass stack"><h2>Ajuda</h2><p class="msg">Quer um passeio pelo AdoleSente? O tutorial mostra para onde ir e o que fazer.</p><button type="button" class="btn ghost" id="pfTut" style="align-self:flex-start">Ver o tutorial</button></section>'+
+   '<section class="glass stack"><h2>Senha de acesso</h2><p class="msg">É a senha que você usa para voltar ao perfil depois de encerrar a sessão. Não é a mesma do diário.</p>'+
+   '<label class="f">Nova senha<input id="apw1" type="password" autocomplete="new-password"></label><label class="f">Repita a nova senha<input id="apw2" type="password" autocomplete="new-password"></label><p class="err" id="aerr"></p>'+
+   '<div class="row"><button type="button" class="btn small" id="apwGo">Trocar senha</button><button type="button" class="btn ghost small" id="aKey">Gerar nova chave de acesso</button></div></section>'+
+   '<section class="glass stack"><h2>Sessão</h2><p class="msg">Ao encerrar, o diário é trancado e você sai do perfil. Seus dados continuam salvos neste aparelho.</p><button type="button" class="btn ghost" id="pfLogout" style="align-self:flex-start">Encerrar sessão</button></section></div>';
+  var showName=function(){$("#pfShowName").textContent=P.name||"Sem nome";var c=$("#pfShowPro");c.textContent=P.pronouns||"";c.hidden=!P.pronouns};
+  $("#pfName").oninput=function(e){P.name=e.target.value;save();renderHeaderAvatar();showName()};
+  var sel=$("#pfPro"),oth=$("#pfOther");
+  sel.onchange=function(){$("#pfOtherW").hidden=sel.value!=="outro";P.pronouns=sel.value==="outro"?oth.value.trim():sel.value;save();showName()};
+  oth.oninput=function(){P.pronouns=oth.value.trim();save();showName()};
+  v.querySelectorAll("[data-av]").forEach(function(b){b.onclick=function(){A.type=b.dataset.av;pfCommit();viewProfile(v)}});
+  v.querySelectorAll("[data-icon]").forEach(function(b){b.onclick=function(){A.icon=b.dataset.icon;A.type="icon";pfCommit();viewProfile(v)}});
+  v.querySelectorAll("[data-avbg]").forEach(function(b){b.onclick=function(){A.bg=b.dataset.avbg;pfCommit();viewProfile(v)}});
+  v.querySelectorAll("[data-char]").forEach(function(b){b.onclick=function(){A.charId=b.dataset.char;A.type="char";pfCommit();viewProfile(v)}});
+  var live=function(){save();renderHeaderAvatar();var big=v.querySelector(".av");if(big)big.outerHTML=avatarHTML2(88);
+    v.querySelectorAll("[data-char] .av img").forEach(function(im){var y=+A.y||0;im.style.objectPosition="50% "+y+"%";im.style.transform="scale("+((+A.zoom||100)/100)+")";im.style.transformOrigin="50% "+y+"%"})};
+  var zr=$("#pfZoom"),yr=$("#pfY");
+  if(zr)zr.oninput=function(){A.zoom=+zr.value;zr.parentElement.querySelector("output").textContent=zr.value+"%";live()};
+  if(yr)yr.oninput=function(){A.y=+yr.value;yr.parentElement.querySelector("output").textContent=yr.value+"%";live()};
+  var ab=$("#pfAvBg");if(ab)ab.oninput=function(){A.bg=ab.value;save();renderHeaderAvatar();var big=v.querySelector(".av");if(big){big.style.background=ab.value;big.style.color=onColor(ab.value)}};
+  v.querySelectorAll("[data-ts]").forEach(function(b){b.onclick=function(){P.textSize=+b.dataset.ts;pfCommit();viewProfile(v)}});
+  var ts=$("#pfTs");if(ts)ts.oninput=function(){P.textSize=+ts.value;$("#tsOut").textContent=ts.value+"%";pfCommit()};
+  v.querySelectorAll("[data-pal]").forEach(function(b){b.onclick=function(){var x=PALS[+b.dataset.pal];P.colors=x.c?Object.assign({},x.c):null;pfCommit();viewProfile(v)}});
+  v.querySelectorAll("[data-pc]").forEach(function(i){i.oninput=function(){P.colors=Object.assign({brand:col("brand"),accent:col("accent"),surface:col("surface"),extra:col("extra")},P.colors||{});P.colors[i.dataset.pc]=i.value;pfCommit();
+    v.querySelectorAll("[data-pal]").forEach(function(b){b.setAttribute("aria-pressed","false")})}});
+  v.querySelectorAll("[data-lay]").forEach(function(b){b.onclick=function(){S.theme.layout=b.dataset.lay;pfCommit();viewProfile(v)}});
+  $("#pfTut").onclick=tutStart;
+  $("#apwGo").onclick=function(){var a=$("#apw1").value,b2=$("#apw2").value,er=$("#aerr");
+    if(a.length<4){er.textContent="Use pelo menos 4 caracteres.";return}if(a!==b2){er.textContent="As senhas são diferentes.";return}
+    makeAuth(a).then(function(n){var o=S.profile.auth||{};n.rsalt=o.rsalt;n.rhash=o.rhash;S.profile.auth=n;saveNow();$("#apw1").value="";$("#apw2").value="";er.textContent="";toast("Senha de acesso trocada.")},function(){er.textContent="Não foi possível trocar a senha."})};
+  $("#aKey").onclick=function(){makeRecovery().then(function(rec){acctCode($("#view"),rec,function(){S.profile.auth=S.profile.auth||{};S.profile.auth.rsalt=rec.rsalt;S.profile.auth.rhash=rec.rhash;saveNow();toast("Chave de acesso guardada.");renderView()})})};
+  $("#pfLogout").onclick=function(){tutClear();D.key=null;D.notes=[];D.sel=null;sess={q:null,sug:null};try{sessionStorage.removeItem("as.q")}catch(e){}
+    S.loggedOut=true;saveNow();renderNav();renderHeaderAvatar();go("home")};
+  $("#pfReset").onclick=function(){P.colors=null;pfCommit();viewProfile(v);toast("Cores originais de volta.")};
+}
+function viewFriends(v){
+  var F=S.friends;
+  if(!S.characters.length){v.innerHTML='<div class="glass empty"><b>Nenhum amigo ainda</b>Crie personagens no Estúdio, aba Personagens.</div>';return}
+  v.innerHTML='<div class="stack"><div><h1>'+esc(F.title)+'</h1><p class="muted">Toque em um perfil para ver a ficha.</p></div>'+
+   '<div class="friends '+esc(F.layout)+'" style="--cols:'+(+F.cols||2)+'">'+
+   S.characters.map(function(c,i){return '<button class="fcard" style="--c:'+esc(c.color)+'" data-friend="'+i+'">'+figHTML(c)+
+     '<div class="info"><b>'+esc(c.name)+'</b>'+(F.showRole?'<span class="muted">'+esc(c.role)+'</span>':"")+(F.showBio?'<span class="bio">'+esc(c.bio)+'</span>':"")+'</div></button>'}).join("")+'</div></div>';
+}
+var prof=0;
+function openFriend(i){prof=i;lastFocus=document.activeElement;$("#profOv").hidden=false;renderProfile();$("#profile .pclose").focus()}
+function renderProfile(){
+  var c=S.characters[prof],n=S.characters.length;if(!c)return;
+  var fg=onColor(mixHex(c.color,col("extra"),.15));
+  var rows=[];if(c.likes)rows.push(["Gosta de",c.likes]);(c.fields||[]).forEach(function(f){if(f.k||f.v)rows.push([f.k,f.v])});
+  var el=$("#profile");
+  el.style.setProperty("--c",c.color);el.style.setProperty("--ex",col("extra"));el.style.setProperty("--fg",fg);
+  el.innerHTML='<button class="pclose" data-close aria-label="Fechar ficha">✕</button>'+
+   '<div class="pmark" aria-hidden="true">'+esc(c.name)+'</div>'+
+   '<div class="pinfo"><span class="pkick">Conheça</span><h2 class="pname">'+esc(c.name)+'</h2><p class="prole">'+esc(c.role)+'</p>'+
+    (c.quote?'<p class="pquote">“'+esc(c.quote)+'”</p>':"")+(c.bio?'<p class="pbio">'+esc(c.bio)+'</p>':"")+
+    ((c.traits||[]).length?'<div class="pchips">'+c.traits.map(function(t){return '<span>'+esc(t)+'</span>'}).join("")+'</div>':"")+
+    (rows.length?'<dl class="pdl">'+rows.map(function(r){return '<div><dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd></div>'}).join("")+'</dl>':"")+'</div>'+
+   '<div class="pfig">'+(c.img?'<img src="'+esc(c.img)+'" alt="'+esc(c.name)+'">':'<span class="pinit" aria-hidden="true">'+esc((c.name||"?").charAt(0).toUpperCase())+'</span>')+'</div>'+
+   (n>1?'<div class="pnav"><button data-pn="-1" aria-label="Personagem anterior">‹</button><span>'+(prof+1)+' / '+n+'</span><button data-pn="1" aria-label="Próximo personagem">›</button></div>':"");
+}
+function stepProfile(d){var n=S.characters.length;prof=(prof+d+n)%n;renderProfile()}
+
+/* ---------- diário cifrado (AES-GCM no navegador) ---------- */
+var D={key:null,notes:[],sel:null,err:""};
+var enc=new TextEncoder(),dec=new TextDecoder();
+function b64(buf){var a=new Uint8Array(buf),s="";for(var i=0;i<a.length;i++)s+=String.fromCharCode(a[i]);return btoa(s)}
+function unb64(s){var b=atob(s),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+async function deriveKey(pw,salt){var km=await crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt:salt,iterations:150000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+async function genDEK(){return crypto.subtle.generateKey({name:"AES-GCM",length:256},true,["encrypt","decrypt"])}
+async function wrapDEK(dek,kek){var raw=await crypto.subtle.exportKey("raw",dek),iv=crypto.getRandomValues(new Uint8Array(12));
+  return {iv:b64(iv),ct:b64(await crypto.subtle.encrypt({name:"AES-GCM",iv:iv},kek,raw))}}
+async function unwrapDEK(w,kek){var raw=await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(w.iv)},kek,unb64(w.ct));
+  return crypto.subtle.importKey("raw",raw,{name:"AES-GCM",length:256},true,["encrypt","decrypt"])}
+async function decryptWith(key){var pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(S.diary.iv)},key,unb64(S.diary.data));return JSON.parse(dec.decode(pt))}
+function newCode(){var al="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",b=crypto.getRandomValues(new Uint8Array(16)),o="";for(var i=0;i<16;i++){o+=al[b[i]%32];if(i%4===3&&i<15)o+="-"}return o}
+function normCode(c){return String(c||"").toUpperCase().replace(/[^A-Z0-9]/g,"")}
+async function prepareCode(){var code=newCode(),rs=crypto.getRandomValues(new Uint8Array(16)),rk=await deriveKey(normCode(code),rs);
+  D.pending={code:code,rsalt:b64(rs),rwk:await wrapDEK(D.key,rk)}}
+async function pwHash(pw,saltB64){var km=await crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveBits"]);
+  return b64(await crypto.subtle.deriveBits({name:"PBKDF2",salt:unb64(saltB64),iterations:150000,hash:"SHA-256"},km,256))}
+async function makeAuth(pw){var salt=b64(crypto.getRandomValues(new Uint8Array(16)));return {salt:salt,hash:await pwHash(pw,salt)}}
+async function makeRecovery(){var code=newCode(),rs=b64(crypto.getRandomValues(new Uint8Array(16)));return {code:code,rsalt:rs,rhash:await pwHash(normCode(code),rs)}}
+function acctCode(v,rec,commit){
+  v.innerHTML='<section class="glass stack"><h1>Chave de acesso</h1><p>Se um dia você esquecer a senha de acesso, esta chave é a forma de entrar de novo no seu perfil. Anote em papel e guarde num lugar seguro. Ela aparece só agora.</p>'+
+   '<div class="codebox" id="codeShow">'+esc(rec.code)+'</div><div class="row"><button type="button" class="btn ghost small" id="cCopy">Copiar chave</button></div>'+
+   '<label class="row"><input type="checkbox" id="cOk"> Anotei a chave num lugar seguro</label><button type="button" class="btn" id="cGo" disabled>Continuar</button></section>';
+  $("#cOk").onchange=function(){$("#cGo").disabled=!$("#cOk").checked};
+  function sel(){var r=document.createRange();r.selectNodeContents($("#codeShow"));var sl=getSelection();sl.removeAllRanges();sl.addRange(r);toast("Chave selecionada. Copie e guarde.")}
+  $("#cCopy").onclick=function(){try{navigator.clipboard.writeText(rec.code).then(function(){toast("Chave copiada.")},sel)}catch(e){sel()}};
+  $("#cGo").onclick=commit}
+function showCode(v){var P=D.pending;
+  v.innerHTML='<section class="glass stack"><h1>Chave de recuperação</h1><p>Se um dia você esquecer a senha do diário, esta chave é a única forma de abri-lo de novo. Anote em papel e guarde num lugar seguro. Ela aparece só agora.</p>'+
+   '<div class="codebox" id="codeShow">'+esc(P.code)+'</div><div class="row"><button type="button" class="btn ghost small" id="cCopy">Copiar chave</button></div>'+
+   '<label class="row"><input type="checkbox" id="cOk"> Anotei a chave num lugar seguro</label><button type="button" class="btn" id="cGo" disabled>Continuar</button></section>';
+  $("#cOk").onchange=function(){$("#cGo").disabled=!$("#cOk").checked};
+  $("#cCopy").onclick=function(){try{navigator.clipboard.writeText(P.code).then(function(){toast("Chave copiada.")},function(){selectCode()})}catch(e){selectCode()}};
+  function selectCode(){var r=document.createRange();r.selectNodeContents($("#codeShow"));var sl=getSelection();sl.removeAllRanges();sl.addRange(r);toast("Chave selecionada. Copie e guarde.")}
+  $("#cGo").onclick=function(){S.diary.rsalt=P.rsalt;S.diary.rwk=P.rwk;D.pending=null;saveNow();toast("Chave de recuperação guardada.");viewDiary(v)};
+}
+async function encryptNotes(){var iv=crypto.getRandomValues(new Uint8Array(12));
+  var ct=await crypto.subtle.encrypt({name:"AES-GCM",iv:iv},D.key,enc.encode(JSON.stringify(D.notes)));
+  S.diary.iv=b64(iv);S.diary.data=b64(ct);save()}
+function paperStyle(){var P=S.diaryStyle;return '--paper:'+P.paper+';--lines:'+P.lines+';--mline:'+P.mline+';--ink2:'+P.ink+';--lh:calc('+(+P.lh)+'px * var(--scale));--fs:calc('+(+P.fs)+'px * var(--scale));'+(P.paperImg?'--pimg:url(&quot;'+esc(P.paperImg)+'&quot;);':"")}
+function paperHTML(date,title,text,preview){var P=S.diaryStyle;
+  return '<div class="paper pt-'+esc(P.type)+(P.margin?' marg':"")+(P.holes?' holes':"")+'" style="'+paperStyle()+'">'+
+   '<div class="phead"><span class="pdate">'+esc(date)+'</span><input class="ptitle" id="'+(preview?'pvT':'nTitle')+'" maxlength="80" aria-label="Título da página" placeholder="Título da página" value="'+esc(title)+'"'+(preview?' readonly tabindex="-1"':"")+'></div>'+
+   '<textarea class="ptext" id="'+(preview?'pvX':'nText')+'" aria-label="Texto da página" placeholder="Escreva aqui…"'+(preview?' readonly tabindex="-1"':"")+'>'+esc(text)+'</textarea></div>'}
+function growPaper(){var ta=document.querySelector(".ptext:not([readonly])");if(!ta)return;ta.style.height="auto";
+  var lh=parseFloat(getComputedStyle(ta).lineHeight)||32,h=Math.max(ta.scrollHeight,lh*14);ta.style.height=Math.ceil(h/lh)*lh+"px"}
+function viewDiary(v,goPaper,focusTitle){
+  if(!(window.crypto&&crypto.subtle)){v.innerHTML='<div class="glass empty"><b>Diário indisponível</b>Este navegador não oferece criptografia. Abra em um navegador atual.</div>';return}
+  if(D.pending&&D.key){showCode(v);return}
+  if(!S.diary){v.innerHTML='<section class="glass stack"><h1>Seu diário</h1><p>Crie uma senha. Tudo o que você escrever fica trancado com ela, só neste aparelho.</p>'+
+    '<div id="dSet" class="stack"><label class="f">Nova senha<input id="dp1" type="password" autocomplete="new-password"></label>'+
+    '<label class="f">Repita a senha<input id="dp2" type="password" autocomplete="new-password"></label><p class="err" id="derr">'+esc(D.err)+'</p>'+
+    '<button class="btn" type="button" id="dSetGo">Criar diário</button></div><p class="msg">Depois de criar a senha, você recebe uma chave de recuperação para o caso de esquecê-la.</p></section>';
+    var mk=async function(){var a=$("#dp1").value,b=$("#dp2").value;
+      if(a.length<4){$("#derr").textContent="Use pelo menos 4 caracteres.";return}
+      if(a!==b){$("#derr").textContent="As senhas são diferentes.";return}
+      try{var salt=crypto.getRandomValues(new Uint8Array(16)),kek=await deriveKey(a,salt);D.key=await genDEK();D.notes=[];
+        S.diary={v:2,salt:b64(salt),wk:await wrapDEK(D.key,kek)};await encryptNotes();await prepareCode();D.sel=null;D.err="";viewDiary(v)}
+      catch(x){$("#derr").textContent="Não foi possível criar o diário."}};
+    $("#dSetGo").onclick=mk;$("#dp2").onkeydown=function(e){if(e.key==="Enter")mk()};return}
+  if(!D.key){
+    var hasRec=!!(S.diary.rwk&&S.diary.rsalt);
+    v.innerHTML='<section class="glass stack"><h1>Diário trancado</h1><div id="dIn" class="stack"><label class="f">Senha<input id="dpw" type="password" autocomplete="current-password"></label>'+
+    '<p class="err" id="derr">'+esc(D.err)+'</p><button class="btn" type="button" id="dInGo">Abrir</button></div>'+
+    '<details><summary class="muted" style="cursor:pointer">Esqueci a senha</summary><div class="stack" style="margin-top:10px">'+
+    (hasRec?'<p class="msg">Digite a chave de recuperação que você anotou e escolha uma senha nova. As suas páginas continuam como estão.</p>'+
+      '<label class="f">Chave de recuperação<input id="rcode" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX"></label>'+
+      '<label class="f">Nova senha<input id="rp1" type="password" autocomplete="new-password"></label>'+
+      '<label class="f">Repita a nova senha<input id="rp2" type="password" autocomplete="new-password"></label><p class="err" id="rerr"></p>'+
+      '<button class="btn" type="button" id="rGo">Criar nova senha e abrir</button>'+
+      '<p class="msg">Sem a chave, só dá para apagar o diário e começar de novo.</p>'
+     :'<p class="msg">Este diário foi criado antes da chave de recuperação, então não dá para recuperar a senha. Só dá para apagar o diário e começar de novo. As páginas antigas se perdem.</p>')+
+    '<button class="btn danger small" id="dWipe" style="align-self:flex-start">Apagar diário</button></div></details></section>';
+    var op=async function(){
+      try{var kek=await deriveKey($("#dpw").value,unb64(S.diary.salt)),dek,notes,legacy=false;
+        if(S.diary.wk){dek=await unwrapDEK(S.diary.wk,kek);notes=await decryptWith(dek)}
+        else{notes=await decryptWith(kek);dek=await genDEK();legacy=true}
+        D.key=dek;D.notes=notes;D.pending=null;
+        if(legacy){S.diary.wk=await wrapDEK(dek,kek);S.diary.v=2;await encryptNotes()}
+        if(!(S.diary.rwk&&S.diary.rsalt))await prepareCode();
+        D.sel=D.notes.length?D.notes[0].id:null;D.err="";viewDiary(v)}
+      catch(x){D.key=null;$("#derr").textContent="Senha incorreta."}};
+    $("#dInGo").onclick=op;$("#dpw").onkeydown=function(e){if(e.key==="Enter")op()};
+    if(hasRec){$("#rGo").onclick=async function(){var c=normCode($("#rcode").value),a=$("#rp1").value,b2=$("#rp2").value,er=$("#rerr");
+      if(c.length!==16){er.textContent="A chave tem 16 letras e números.";return}
+      if(a.length<4){er.textContent="Use pelo menos 4 caracteres na senha nova.";return}
+      if(a!==b2){er.textContent="As senhas novas são diferentes.";return}
+      try{var rk=await deriveKey(c,unb64(S.diary.rsalt)),dek=await unwrapDEK(S.diary.rwk,rk),notes=await decryptWith(dek);
+        var salt=crypto.getRandomValues(new Uint8Array(16)),kek=await deriveKey(a,salt);
+        S.diary.salt=b64(salt);S.diary.wk=await wrapDEK(dek,kek);S.diary.v=2;saveNow();
+        D.key=dek;D.notes=notes;D.pending=null;D.sel=notes.length?notes[0].id:null;toast("Senha nova definida.");viewDiary(v)}
+      catch(x){er.textContent="Chave de recuperação incorreta."}}}
+    var w=$("#dWipe");w.onclick=function(){if(w.dataset.s!=="1"){w.dataset.s="1";w.textContent="Toque de novo para apagar tudo";return}
+      S.diary=null;D.key=null;D.notes=[];D.pending=null;save();viewDiary(v)};return}
+  var cur_=D.notes.find(function(n){return n.id===D.sel});
+  v.innerHTML='<div class="stack"><div class="row"><h1 class="grow">Diário</h1><button class="btn ghost small" id="dLock">Trancar</button></div>'+
+   '<div class="row diary-split" style="align-items:flex-start"><div class="stack grow notelist" style="min-width:220px;flex:1 1 220px"><button class="btn" id="dNew">Nova página</button>'+
+   (D.notes.length?D.notes.map(function(n){return '<button class="note'+(n.id===D.sel?' on':'')+'" data-note="'+n.id+'"><span><b>'+esc(n.title||"Sem título")+'</b></span><small class="muted">'+esc(n.date)+'</small></button>'}).join(""):'<div class="glass empty"><b>Nada por aqui ainda</b>Toque em “Nova página” para escrever a primeira.</div>')+
+   '</div><div class="stack" style="flex:2 1 320px;min-width:0">'+
+   '<div class="glass ideas"><b style="color:var(--head)">Sem ideia do que escrever?</b><p class="idtxt" id="idText">'+esc(IDEAS[ideaI])+'</p><div class="row"><button type="button" class="btn ghost small" id="idNext">Outra ideia</button><button type="button" class="btn small" id="idUse">Usar na página</button></div></div>'+
+   (cur_?paperHTML(cur_.date,cur_.title,cur_.text,false)+
+     '<div class="row ndock"><span class="msg grow" id="nState">Salvo</span><button class="btn small" id="nDone">Pronto</button><button class="btn danger small" id="nDel">Apagar página</button></div>':'<div class="glass"><p class="muted">Escolha uma página ou crie uma nova.</p></div>')+'</div></div>'+
+   '<details class="glass"><summary style="cursor:pointer;font-weight:600;color:var(--head)">Segurança do diário</summary><div class="stack" style="margin-top:12px">'+
+     '<strong style="color:var(--head)">Trocar senha</strong><label class="f">Nova senha<input id="sp1" type="password" autocomplete="new-password"></label><label class="f">Repita a nova senha<input id="sp2" type="password" autocomplete="new-password"></label><p class="err" id="serr"></p><button type="button" class="btn small" id="spGo" style="align-self:flex-start">Trocar senha</button>'+
+     '<strong style="color:var(--head)">Chave de recuperação</strong><p class="msg">Gere uma chave nova se perdeu a anterior. Depois de guardar a nova, a antiga deixa de funcionar.</p><button type="button" class="btn ghost small" id="newKey" style="align-self:flex-start">Gerar nova chave</button>'+
+   '</div></details></div>';
+  $("#dLock").onclick=function(){D.key=null;D.notes=[];D.sel=null;D.pending=null;viewDiary(v)};
+  $("#spGo").onclick=async function(){var a=$("#sp1").value,b2=$("#sp2").value,er=$("#serr");
+    if(a.length<4){er.textContent="Use pelo menos 4 caracteres.";return}if(a!==b2){er.textContent="As senhas são diferentes.";return}
+    try{var salt=crypto.getRandomValues(new Uint8Array(16)),kek=await deriveKey(a,salt);S.diary.salt=b64(salt);S.diary.wk=await wrapDEK(D.key,kek);S.diary.v=2;saveNow();$("#sp1").value="";$("#sp2").value="";er.textContent="";toast("Senha trocada.")}
+    catch(x){er.textContent="Não foi possível trocar a senha."}};
+  $("#newKey").onclick=async function(){try{await prepareCode();viewDiary(v)}catch(x){toast("Não foi possível gerar a chave.")}};
+  $("#idNext").onclick=function(){ideaI=(ideaI+1)%IDEAS.length;$("#idText").textContent=IDEAS[ideaI]};
+  $("#idUse").onclick=async function(){var idea=IDEAS[ideaI];
+    if(!cur_){var n={id:uid(),title:"",text:idea+"\n\n",date:new Date().toLocaleDateString("pt-BR")};D.notes.unshift(n);D.sel=n.id;await encryptNotes();viewDiary(v,true,false);setTimeout(function(){var t=$("#nText");if(t){t.focus();var l=t.value.length;try{t.setSelectionRange(l,l)}catch(x){}}},120);return}
+    var ta=$("#nText");ta.value=ta.value.trim()?ta.value.replace(/\s*$/,"")+"\n\n"+idea+"\n\n":idea+"\n\n";
+    ta.dispatchEvent(new Event("input"));ta.focus();var l2=ta.value.length;try{ta.setSelectionRange(l2,l2)}catch(x){}};
+  $("#dNew").onclick=async function(){var n={id:uid(),title:"",text:"",date:new Date().toLocaleDateString("pt-BR")};D.notes.unshift(n);D.sel=n.id;await encryptNotes();viewDiary(v,true,true)};
+  if(cur_){var tm;var upd=function(){cur_.title=$("#nTitle").value;cur_.text=$("#nText").value;var st0=$("#nState");if(st0)st0.textContent="Salvando…";clearTimeout(tm);tm=setTimeout(async function(){
+      await encryptNotes();var s=$("#nState");if(s)s.textContent="Salvo";
+      var b=document.querySelector('[data-note="'+cur_.id+'"] b');if(b)b.textContent=cur_.title||"Sem título"},500)};
+    growPaper();setTimeout(growPaper,300);
+    if(goPaper&&document.body.classList.contains("mob")){setTimeout(function(){var pe=document.querySelector(".paper");if(pe)pe.scrollIntoView({behavior:"smooth",block:"start"});if(focusTitle){try{$("#nTitle").focus({preventScroll:true})}catch(x){}}},60)}
+    var pp=document.querySelector(".paper"),ta0=$("#nText");
+    pp.addEventListener("click",function(e){if(e.target===pp||e.target.classList.contains("phead")){ta0.focus();var n=ta0.value.length;try{ta0.setSelectionRange(n,n)}catch(x){}}});
+    var typ=function(on){document.body.classList.toggle("typing",on)};
+    [$("#nTitle"),ta0].forEach(function(el){el.addEventListener("focus",function(){typ(true)});el.addEventListener("blur",function(){setTimeout(function(){var a=document.activeElement;typ(!!(a&&(a.id==="nTitle"||a.id==="nText")))},120)})});
+    $("#nDone").onclick=function(){if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();typ(false)};
+    $("#nTitle").oninput=upd;$("#nText").oninput=function(){growPaper();upd()};
+    var d=$("#nDel");d.onclick=async function(){if(d.dataset.s!=="1"){d.dataset.s="1";d.textContent="Toque de novo para apagar";return}
+      D.notes=D.notes.filter(function(n){return n.id!==cur_.id});D.sel=D.notes.length?D.notes[0].id:null;await encryptNotes();viewDiary(v)}}
+}
+
+var IDEAS=["Como foi o seu dia em três palavras? Agora explique cada uma delas.","Se você pudesse ter um superpoder por um dia, qual seria e o que faria com ele?","Escreva sobre algo que fez você rir hoje.","Qual é o seu lugar favorito no mundo? Descreva como se eu nunca tivesse ido lá.","Escreva uma carta para você mesmo(a) daqui a cinco anos.","Qual foi a coisa mais legal que você aprendeu essa semana?","Invente um personagem novo: nome, jeito de ser e uma mania engraçada.","Do que você tem orgulho em você?","Se pudesse mudar uma coisa na sua escola, o que seria?","Escreva sobre alguém que te inspira e por quê.","Qual música você não cansa de ouvir? Como ela faz você se sentir?","Descreva com palavras o que você está vendo pela janela agora.","Qual sonho (de dormir ou de futuro) você nunca esqueceu?","Se o seu animal favorito pudesse falar, o que ele diria?","Escreva três coisas pelas quais você é grato(a) hoje.","Conte um momento em que você foi corajoso(a).","O que você faria com um dia livre, sem nenhuma obrigação?","Continue a história: “Naquela manhã, o céu estava diferente…”","Qual é a sua comida favorita? Escreva a receita do jeito que você imagina.","Do que você sente saudade?","Como seria a casa dos seus sonhos?","Escreva sobre algo que você gostaria de aprender a fazer.","Se você tivesse um amigo imaginário, como ele seria?","Que conselho você daria para alguém um pouco mais novo que você?","Complete: “Hoje eu me senti… porque…”","Uma coisa que me deixa tranquilo(a) é…"];
+var ideaI=Math.floor(Math.random()*IDEAS.length);
+/* ---------- tutorial ---------- */
+var TUT=[
+ {go:"home",t:"#brand",h:"Bem-vindo(a) ao Início",p:"Esta é a sua página inicial, com uma mensagem de boas-vindas. Tocar no logo AdoleSente, lá em cima, sempre traz você de volta pra cá."},
+ {go:"diary",t:'nav [data-go="diary"]',h:"Seu Diário",p:"Aqui você escreve o que quiser, em páginas de caderno. Ele tem senha, então só você abre. Se não souber o que escrever, o diário dá ideias!"},
+ {go:"suggestion",t:'nav [data-go="suggestion"]',h:"Sugestão do dia",p:"Todo dia tem uma ideia pequena para fazer e perguntas aleatórias para responder. É só tocar para sortear outra."},
+ {go:"friends",t:'nav [data-go="friends"]',h:"Os amigos",p:"Conheça o grupo de personagens do AdoleSente. Toque em um deles para abrir a ficha e ver como ele é."},
+ {go:"profile",t:'nav [data-go="profile"]',h:"Seu Perfil",p:"Troque o ícone, o nome, as cores e o tamanho do texto. É também aqui que você encerra a sessão e pode rever este tutorial."},
+ {go:"home",t:"#whatIs",h:"Ficou com dúvida?",p:"O botão “O que sou?” explica o que é o AdoleSente. Tudo pronto: agora é só curtir!"}
+];
+var tutI=-1;
+function tutClear(){document.querySelectorAll(".tut-hl").forEach(function(e){e.classList.remove("tut-hl")});var o=$("#tut");if(o)o.remove()}
+function tutCard(html){var o=$("#tut");if(!o){o=document.createElement("div");o.id="tut";o.className="tut";o.setAttribute("role","dialog");o.setAttribute("aria-label","Tutorial");document.body.appendChild(o)}o.innerHTML=html;return o}
+function tutAsk(){if(S.tut.asked||S.loggedOut||!S.profile.done)return;
+  var o=tutCard('<h3>Quer um passeio rápido?</h3><p>Posso mostrar, em poucas mensagens, para onde ir e o que fazer no AdoleSente. Se mudar de ideia, dá para ver depois no Perfil.</p><div class="row"><button type="button" class="btn ghost small" id="tNo">Agora não</button><button type="button" class="btn small" id="tYes">Quero ver</button></div>');
+  $("#tNo").onclick=function(){S.tut.asked=true;saveNow();tutClear()};
+  $("#tYes").onclick=function(){S.tut.asked=true;saveNow();tutStart()}}
+function tutStart(){closeAll();tutI=0;tutStep()}
+function tutEnd(){tutI=-1;S.tut.asked=true;saveNow();tutClear()}
+function tutStep(){var st=TUT[tutI];tutClear();document.body.classList.remove("typing");
+  if(st.go&&cur!==st.go)go(st.go);
+  var el=document.querySelector(st.t);if(el)el.classList.add("tut-hl");
+  var last=tutI===TUT.length-1;
+  tutCard('<div class="tdots" aria-hidden="true">'+TUT.map(function(_,i){return '<i'+(i===tutI?' class="on"':'')+'></i>'}).join("")+'</div><h3>'+esc(st.h)+'</h3><p>'+esc(st.p)+'</p>'+
+    '<div class="row"><button type="button" class="btn ghost small" id="tSkip">'+(last?'Fechar':'Pular tutorial')+'</button><span class="row" style="gap:8px">'+(tutI>0?'<button type="button" class="btn ghost small" id="tPrev">Voltar</button>':'')+'<button type="button" class="btn small" id="tNext">'+(last?'Concluir':'Próximo')+'</button></span></div>');
+  $("#tSkip").onclick=tutEnd;if($("#tPrev"))$("#tPrev").onclick=function(){tutI--;tutStep()};
+  $("#tNext").onclick=function(){if(last)tutEnd();else{tutI++;tutStep()}}}
+
+/* ---------- sheets ---------- */
+var lastFocus=null;
+function openSheet(title,html){lastFocus=document.activeElement;$("#sheetTitle").textContent=title;$("#sheetBody").innerHTML=html;$("#sheetOv").hidden=false;$("#sheetOv .iconbtn").focus()}
+function closeAll(){$("#profOv").hidden=true;$("#sheetOv").hidden=true;if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+
+
+/* ---------- eventos globais ---------- */
+document.addEventListener("click",function(e){
+  var g=e.target.closest("[data-go]");if(g){if(!$("#sheetOv").hidden)closeAll();go(g.dataset.go);return}
+  var f=e.target.closest("[data-friend]");if(f){openFriend(+f.dataset.friend);return}
+  var pn=e.target.closest("[data-pn]");if(pn){stepProfile(+pn.dataset.pn);return}
+  if(e.target.closest("#profOv [data-close]")||e.target===$("#profOv")){closeAll();return}
+  var n=e.target.closest("[data-note]");if(n){D.sel=n.dataset.note;viewDiary($("#view"),true,false);return}
+  if(e.target.closest("#sheetOv [data-close]")||e.target===$("#sheetOv"))closeAll()});
+$("#whatIs").onclick=function(){openSheet("O que é o AdoleSente?",'<div class="about"><p>AdoleSente é um lugar que tem a intenção de servir como uma pequena diversão diária na vida do jovem. Faz com que você possa pensar um pouco menos nas coisas que te atrapalham diariamente e poder "viajar" um pouquinho mais nas suas ideias!</p><p>Você pode escrever, responder perguntas aleatórias e fazer as pequenas coisas que são sugeridas diariamente. O AdoleSente também tem a companhia de alguns amigos, um grupo de personagens que você pode conhecer um pouquinho. Vai que você se identifica com algum deles, né?</p><p><strong>Solta o artista que tem dentro de você e vem curtir o AdoleSente!</strong></p>'+(S.profile.done&&!S.loggedOut?'<button type="button" class="btn ghost small" id="aboutTut">Ver o tutorial</button>':'')+'</div>');var at=$("#aboutTut");if(at)at.onclick=tutStart};
+$("#openProfile").onclick=function(){go("profile")};
+var brandEl=$("#brand");brandEl.setAttribute("role","link");brandEl.setAttribute("tabindex","0");brandEl.setAttribute("aria-label","AdoleSente: ir para o início");
+var goHome=function(){if(S.loggedOut||!S.profile.done)return;closeAll();go("home")};
+brandEl.onclick=goHome;brandEl.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();goHome()}};
+var SIZES=[100,125,150,175];
+$("#textSize").onclick=function(){var c0=S.profile.textSize||100,i=SIZES.indexOf(c0);S.profile.textSize=SIZES[(i+1)%SIZES.length];save();applyTheme();toast("Texto em "+S.profile.textSize+"%");if(cur==="profile")renderView()};
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeAll();if(!$("#profOv").hidden&&S.characters.length>1){if(e.key==="ArrowRight")stepProfile(1);if(e.key==="ArrowLeft")stepProfile(-1)}});
+window.addEventListener("hashchange",function(){var h=location.hash.replace("#","");if(SCREENS[h]&&h!==cur){cur=h;renderNav();renderView()}});
+
+window.addEventListener("error",function(e){toast("Erro: "+e.message)});
+applyTheme();renderNav();renderView();setTimeout(tutAsk,600);
+})();
+</script>
