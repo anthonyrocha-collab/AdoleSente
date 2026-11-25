@@ -286,7 +286,7 @@ body.mob .overlay{justify-content:center;align-items:flex-end}
 body.mob .sheet{max-width:430px;width:100%;margin-inline:auto}
 body.mob .profile{max-width:430px;height:100%;border-radius:0}
 body.mob .pmark{display:none}
-/* ficha no celular: corpo inteiro e grande à direita, informações na coluna da esquerda */
+/* ficha no celular (substitui o painel inferior): corpo inteiro e grande à direita, informações na coluna da esquerda */
 body.mob .pfig{left:auto;right:-17%;top:auto;bottom:0;width:auto;height:90%;aspect-ratio:9/16}
 body.mob .pfig img{width:100%;height:100%;object-fit:contain;object-position:center bottom;transform:none}
 body.mob .pinfo{position:relative;width:100%;height:100%;max-height:none;border-radius:0;background:none;box-shadow:none;gap:8px;scrollbar-width:thin;
@@ -762,7 +762,6 @@ function viewProfile(v){
      '<button type="button" class="btn ghost small" id="pfReset" style="align-self:flex-start">Voltar às cores originais</button></section>'+
    '<section class="glass stack"><h2>Formato da tela</h2><p class="msg">Escolha como o app aparece neste aparelho.</p><div class="seg" role="group" aria-label="Formato da tela">'+
      [["mobile","Celular"],["desktop","Computador"],["auto","Automático"]].map(function(x){return '<button type="button" data-lay="'+x[0]+'" aria-pressed="'+((S.theme.layout||"auto")===x[0])+'">'+x[1]+'</button>'}).join("")+'</div></section>'+
-   '<section class="glass stack"><h2>Backup dos personagens</h2><p class="msg">Salva um arquivo com os personagens (fotos e fichas), as sugestões, as perguntas e os textos. Não inclui diário, respostas nem senhas.</p><button type="button" class="btn ghost" id="pfBackup" style="align-self:flex-start">Salvar backup</button><textarea id="pfBackTxt" readonly hidden rows="5" style="width:100%"></textarea></section>'+
    '<section class="glass stack"><h2>Ajuda</h2><p class="msg">Quer um passeio pelo AdoleSente? O tutorial mostra para onde ir e o que fazer.</p><button type="button" class="btn ghost" id="pfTut" style="align-self:flex-start">Ver o tutorial</button></section>'+
    '<section class="glass stack"><h2>Senha de acesso</h2><p class="msg">É a senha que você usa para voltar ao perfil depois de encerrar a sessão. Não é a mesma do diário.</p>'+
    '<label class="f">Nova senha<input id="apw1" type="password" autocomplete="new-password"></label><label class="f">Repita a nova senha<input id="apw2" type="password" autocomplete="new-password"></label><p class="err" id="aerr"></p>'+
@@ -789,11 +788,6 @@ function viewProfile(v){
   v.querySelectorAll("[data-pc]").forEach(function(i){i.oninput=function(){P.colors=Object.assign({brand:col("brand"),accent:col("accent"),surface:col("surface"),extra:col("extra")},P.colors||{});P.colors[i.dataset.pc]=i.value;pfCommit();
     v.querySelectorAll("[data-pal]").forEach(function(b){b.setAttribute("aria-pressed","false")})}});
   v.querySelectorAll("[data-lay]").forEach(function(b){b.onclick=function(){S.theme.layout=b.dataset.lay;pfCommit();viewProfile(v)}});
-  $("#pfBackup").onclick=async function(){
-    var data=JSON.stringify({app:"adolesente",kind:"conteudo",exportedAt:new Date().toISOString(),characters:S.characters,suggestions:S.suggestions,questions:S.questions,texts:S.texts,welcome:S.welcome,home:S.home,friends:S.friends,buttons:S.buttons,nav:S.nav,theme:S.theme},null,1);
-    try{var dl=window.claude&&claude.use?await claude.use("downloads"):null;
-      if(dl){await dl.save({filename:"adolesente-backup.json",data:data});toast("Backup pronto.");return}}catch(e){if(e&&e.code==="declined")return}
-    var t=$("#pfBackTxt");t.hidden=false;t.value=data;t.focus();t.select();toast("Copie o texto da caixa e guarde.")};
   $("#pfTut").onclick=tutStart;
   $("#apwGo").onclick=function(){var a=$("#apw1").value,b2=$("#apw2").value,er=$("#aerr");
     if(a.length<4){er.textContent="Use pelo menos 4 caracteres.";return}if(a!==b2){er.textContent="As senhas são diferentes.";return}
