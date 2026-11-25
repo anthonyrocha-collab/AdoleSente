@@ -346,25 +346,25 @@ var SCREENS={home:"Início",diary:"Diário",suggestion:"Sugestão do dia",friend
 function defaults(){return {
   profile:{name:"",pronouns:"",done:false,auth:null,textSize:100,avatar:{type:"initial",icon:"star",bg:"",charId:"",zoom:100,y:0},colors:null},
   theme:{
-    appName:"AdoleSente", tagline:"Um cantinho seu para o dia a dia. Use um pouquinho e vá viver o resto.",
+    appName:"AdoleSente", tagline:"Um cantinho seu para o dia a dia.",
     brand:"#6C318C",accent:"#892CB0",surface:"#06C300",text:"#06A700",extra:"#EE82EE",ink:"#2b1238",
     radius:{card:24,button:999,input:12,tile:16}, gloss:true,
     fonts:{display:"Space Grotesk",body:"Inter",mono:"IBM Plex Mono"}, customFonts:{},
-    logo:"", layout:"auto", logoSize:38, showName:false, heroImg:"", bgImg:"", bubbles:true, scale:100
+    logo:"logo.png", layout:"auto", logoSize:64, showName:false, heroImg:"", bgImg:"", bubbles:true, scale:100
   },
   nav:[{id:"home",label:"Início",on:true},{id:"diary",label:"Diário",on:true},{id:"suggestion",label:"Sugestão",on:true},{id:"friends",label:"Amigos",on:true},{id:"profile",label:"Perfil",on:true}],
   home:{banner:true,question:true,tiles:true,align:"left"},
   friends:{title:"Conheça nossos amigos",layout:"grid",cols:2,fit:"contain",ratio:"auto",showRole:true,showBio:false},
   buttons:[
-    {id:"b1",label:"Meu diário",hint:"Só você lê",target:"diary",color:"brand",w:6},
-    {id:"b2",label:"Sugestão do dia",hint:"Algo para fazer longe da tela",target:"suggestion",color:"surface",w:3},
-    {id:"b3",label:"Conheça os amigos",hint:"4 perfis",target:"friends",color:"extra",w:3}
+    {id:"b1",label:"Meu diário",hint:"Escreva quando quiser",target:"diary",color:"accent",w:6},
+    {id:"b2",label:"Sugestão do dia",hint:"Algo para fazer longe da tela",target:"suggestion",color:"text",w:3},
+    {id:"b3",label:"Conheça os amigos",hint:"4 perfis",target:"friends",color:"brand",w:3}
   ],
   characters:[
-    {id:"c1",name:"Estéfani",role:"A criativa",bio:"Transforma qualquer sobra em colagem. Sempre tem uma ideia nova guardada no bolso.",traits:["curiosa","artista","bem-humorada"],likes:"Tesoura, revistas velhas e glitter.",color:"#892CB0",img:"",quote:"Toda sobra vira uma ideia.",fields:[{k:"Idade",v:"12 anos"}]},
-    {id:"c2",name:"Caio",role:"O explorador",bio:"Gosta de descobrir como as coisas funcionam e de caminhar sem rumo definido.",traits:["aventureiro","observador","leal"],likes:"Mapas, trilhas curtas e fones de ouvido.",color:"#06A700",img:""},
-    {id:"c3",name:"Lia",role:"A ouvinte",bio:"Escuta com atenção e sempre lembra do que você contou. Escreve bilhetes para as amigas.",traits:["empática","calma","atenta"],likes:"Chá, cadernos e playlists longas.",color:"#6C318C",img:""},
-    {id:"c4",name:"Duda",role:"A animada",bio:"Chega rindo e puxa todo mundo para dançar. Também sabe quando é hora de ficar quieta.",traits:["animada","corajosa","divertida"],likes:"Dança, pipoca e filme de comédia.",color:"#EE82EE",img:""}
+    {id:"c1",name:"Estéfani",role:"Boa em tudo",bio:"Ela/Dela, 15 anos de idade.",traits:["estuda francês como hobby","customiza as próprias roupas","tem dois irmãos mais novos"],likes:"moda, produtividade, escrever em seu diário",color:"#892CB0",img:"personagens/estefani.png",quote:"",fields:[]},
+    {id:"c2",name:"Rodrigo",role:"Legal com todo mundo",bio:"Ele/Dele, 15 anos de idade.",traits:["Manda muito bem no skate","joga futebol com o pessoal do bairro","participa de feiras de artesanato"],likes:"Skate, roupa larga, ensinar arte para crianças e idosos",color:"#06A700",img:"personagens/rodrigo.png",quote:"",fields:[]},
+    {id:"c3",name:"Lia",role:"Cabeça cheia",bio:"Ela/Dela, 16 anos.",traits:["Faz teatro como hobby","estuda sobre informática","sino-brasileira"],likes:"Esculturas de argila, ler fanfic, café pelando",color:"#06C300",img:"personagens/lia.png",quote:"",fields:[]},
+    {id:"c4",name:"Duda",role:"Gentileza em pessoa",bio:"Qualquer pronome, 15 anos.",traits:["Sempre faz tudo à mão","vende pinturas e colagens","fala espanhol fluentemente"],likes:"Trabalho manual, cinema com os amigos, bolo de chocolate",color:"#6C318C",img:"personagens/duda.png",quote:"",fields:[]}
   ],
   suggestions:[
     {cat:"Colagem",title:"Colagem do seu momento",text:"Junte revistas, papéis e fotos antigas. Monte uma colagem que represente como você está hoje."},
@@ -413,9 +413,9 @@ function defaults(){return {
     "O que você diria para você mesmo(a) de um ano atrás?",
     "Qual bicho de estimação você teria, e que nome daria a ele?"
   ],
-  texts:{welcomeTitle:"Oi! Que bom te ver por aqui",welcomeBody:"Antes de começar, conte como você quer ser chamado(a).",
+  texts:{welcomeTitle:"E aí, beleza?",welcomeBody:"Antes de começar, conte como você quer ser chamado(a).",
     nudge:"Já fez? Então feche o app e aproveite o resto do dia."},
-  welcome:{on:true,pos:"afterBanner",text:"Bem-vindo(a) ao seu cantinho, {nome}! Respire fundo, escreva, desenhe e curta o seu dia.",bg:"#EE82EE",autoText:true,color:"#2b1238",font:"",size:22,bold:true,ta:"left",w:100,h:110,pad:18,shape:"",al:"center",off:0,img:"",imgOnly:false,fit:"cover"},
+  welcome:{on:false,pos:"top",text:"Bem-vindo(a) ao seu cantinho, {nome}! Respire fundo, escreva, desenhe e curta o seu dia.",bg:"#892CB0",autoText:true,color:"#2b1238",font:"",size:22,bold:true,ta:"left",w:100,h:110,pad:18,shape:"",al:"center",off:0,img:"",imgOnly:true,fit:"cover"},
   diaryStyle:{type:"ruled",paper:"#FFFDF3",lines:"#9CC7E6",mline:"#E58C8C",ink:"#2B2F4A",lh:32,fs:18,margin:true,holes:true,paperImg:""},
   answers:[], diary:null, loggedOut:false, tut:{asked:false}
 };}
@@ -425,12 +425,13 @@ var S=load();
   try{var r=JSON.parse(localStorage.getItem(KEY)||"null");if(r&&r.profile&&r.profile.done&&!r.tut){S.tut={asked:true};localStorage.setItem(KEY,JSON.stringify(S))}}catch(e){}
 })();
 (function(){ // padroniza os pronomes "Ele/Dele" nas fichas dos personagens já salvas
-  var fix=function(x){return typeof x==="string"?x.replace(/\b(?:elde|ele)\s*\/\s*dele\b/gi,"Ele/Dele"):x},ch=false;
+  var fix=function(x){return typeof x==="string"?x.replace(/\bmais novo\b/g,"mais novos").replace(/(^|\s)á mão(?=\s|$|[.,;])/g,"$1à mão").replace(/\bhobbie\b/gi,"hobby").replace(/\b(?:elde|ele)\s*\/\s*dele\b/gi,"Ele/Dele"):x},ch=false;
   (S.characters||[]).forEach(function(c){Object.keys(c).forEach(function(k){
     if(typeof c[k]==="string"){var n=fix(c[k]);if(n!==c[k]){c[k]=n;ch=true}}
     else if(Array.isArray(c[k]))c[k].forEach(function(it,i){
       if(typeof it==="string"){var n=fix(it);if(n!==it){c[k][i]=n;ch=true}}
       else if(it&&typeof it==="object")Object.keys(it).forEach(function(q){var n=fix(it[q]);if(n!==it[q]){it[q]=n;ch=true}})})})});
+  if(S.texts&&S.texts.welcomeTitle==="E ai, beleza?"){S.texts.welcomeTitle="E aí, beleza?";ch=true}
   if(ch)try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
 })();
 (function(){ // começa como novo usuário: limpa só os dados pessoais, uma única vez
@@ -443,6 +444,14 @@ var S=load();
   d.questions.forEach(function(q){if(S.questions.indexOf(q)<0)S.questions.push(q)});
   d.suggestions.forEach(function(x){if(!S.suggestions.some(function(y){return y.title===x.title}))S.suggestions.push(x)});
   S.contentVer=2;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+})();
+(function(){ // v3: personagens com as imagens oficiais, Caio vira Rodrigo e o logo novo
+  if((S.contentVer||1)>=3)return;var d=defaults();
+  S.characters.forEach(function(c){var dc=d.characters.filter(function(x){return x.id===c.id})[0];
+    if(dc&&!c.img)c.img=dc.img;
+    if(c.id==="c2"&&c.name==="Caio"){c.name="Rodrigo"}});
+  if(!S.theme.logo){S.theme.logo=d.theme.logo;S.theme.logoSize=d.theme.logoSize}
+  S.contentVer=3;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
 })();
 if(!S.nav.some(function(n){return n.id==="profile"}))S.nav.push({id:"profile",label:"Perfil",on:true});
 if(S.profile.avatar&&S.profile.avatar.type==="img"){S.profile.avatar.type="initial"}if(S.profile.avatar)S.profile.avatar.img="";
@@ -721,6 +730,7 @@ function viewProfile(v){
      '<button type="button" class="btn ghost small" id="pfReset" style="align-self:flex-start">Voltar às cores originais</button></section>'+
    '<section class="glass stack"><h2>Formato da tela</h2><p class="msg">Escolha como o app aparece neste aparelho.</p><div class="seg" role="group" aria-label="Formato da tela">'+
      [["mobile","Celular"],["desktop","Computador"],["auto","Automático"]].map(function(x){return '<button type="button" data-lay="'+x[0]+'" aria-pressed="'+((S.theme.layout||"auto")===x[0])+'">'+x[1]+'</button>'}).join("")+'</div></section>'+
+   '<section class="glass stack"><h2>Backup dos personagens</h2><p class="msg">Salva um arquivo com os personagens (fotos e fichas), as sugestões, as perguntas e os textos. Não inclui diário, respostas nem senhas.</p><button type="button" class="btn ghost" id="pfBackup" style="align-self:flex-start">Salvar backup</button><textarea id="pfBackTxt" readonly hidden rows="5" style="width:100%"></textarea></section>'+
    '<section class="glass stack"><h2>Ajuda</h2><p class="msg">Quer um passeio pelo AdoleSente? O tutorial mostra para onde ir e o que fazer.</p><button type="button" class="btn ghost" id="pfTut" style="align-self:flex-start">Ver o tutorial</button></section>'+
    '<section class="glass stack"><h2>Senha de acesso</h2><p class="msg">É a senha que você usa para voltar ao perfil depois de encerrar a sessão. Não é a mesma do diário.</p>'+
    '<label class="f">Nova senha<input id="apw1" type="password" autocomplete="new-password"></label><label class="f">Repita a nova senha<input id="apw2" type="password" autocomplete="new-password"></label><p class="err" id="aerr"></p>'+
@@ -747,6 +757,11 @@ function viewProfile(v){
   v.querySelectorAll("[data-pc]").forEach(function(i){i.oninput=function(){P.colors=Object.assign({brand:col("brand"),accent:col("accent"),surface:col("surface"),extra:col("extra")},P.colors||{});P.colors[i.dataset.pc]=i.value;pfCommit();
     v.querySelectorAll("[data-pal]").forEach(function(b){b.setAttribute("aria-pressed","false")})}});
   v.querySelectorAll("[data-lay]").forEach(function(b){b.onclick=function(){S.theme.layout=b.dataset.lay;pfCommit();viewProfile(v)}});
+  $("#pfBackup").onclick=async function(){
+    var data=JSON.stringify({app:"adolesente",kind:"conteudo",exportedAt:new Date().toISOString(),characters:S.characters,suggestions:S.suggestions,questions:S.questions,texts:S.texts,welcome:S.welcome,home:S.home,friends:S.friends,buttons:S.buttons,nav:S.nav,theme:S.theme},null,1);
+    try{var dl=window.claude&&claude.use?await claude.use("downloads"):null;
+      if(dl){await dl.save({filename:"adolesente-backup.json",data:data});toast("Backup pronto.");return}}catch(e){if(e&&e.code==="declined")return}
+    var t=$("#pfBackTxt");t.hidden=false;t.value=data;t.focus();t.select();toast("Copie o texto da caixa e guarde.")};
   $("#pfTut").onclick=tutStart;
   $("#apwGo").onclick=function(){var a=$("#apw1").value,b2=$("#apw2").value,er=$("#aerr");
     if(a.length<4){er.textContent="Use pelo menos 4 caracteres.";return}if(a!==b2){er.textContent="As senhas são diferentes.";return}
