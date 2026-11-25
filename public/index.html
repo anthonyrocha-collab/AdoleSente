@@ -147,7 +147,7 @@ nav.tabs img{width:24px;height:24px;object-fit:contain}
 .sw{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
 .swrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 /* perfil */
-.av{--s:44px;width:var(--s);height:var(--s);border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;background:var(--brand);color:#fff;
+.av{--s:44px;position:relative;width:var(--s);height:var(--s);border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;background:var(--brand);color:#fff;
   font:800 calc(var(--s) * .46) var(--f-display);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 4px 10px -4px rgba(0,0,0,.4)}
 .av img{width:100%;height:100%;object-fit:cover}
 .av svg{width:56%;height:56%}
@@ -697,8 +697,9 @@ var AVI={
   bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
   smile:'<circle cx="12" cy="12" r="9"/><path d="M8 14a5 5 0 0 0 8 0M9 9.5h.01M15 9.5h.01"/>'};
 var AVNAMES={star:"Estrela",heart:"Coração",moon:"Lua",sun:"Sol",cloud:"Nuvem",music:"Música",flower:"Flor",paw:"Patinha",leaf:"Folha",bolt:"Raio",smile:"Sorriso"};
-function cropStyle(A){var y=Math.max(0,Math.min(100,30+(+A.y||0)*.7)),z=(+A.zoom||100)/100*1.5; /* base: do topo da cabeça até o torso */
-  return 'object-position:50% '+y+'%;transform:scale('+z+');transform-origin:50% 0%'}
+function cropStyle(A){ /* quadro do ícone: zoom 100% = da cabeça ao torso; a barra vertical desce pelo corpo, de ponta a ponta */
+  var z=(+A.zoom||100)/100*1.5,R=16/9,f0=0.115,fmax=Math.max(f0,1-1/(z*R)),f=f0+Math.max(0,Math.min(100,+A.y||0))/100*(fmax-f0);
+  return 'position:absolute;max-width:none;object-fit:fill;width:'+(z*100).toFixed(1)+'%;height:auto;left:50%;transform:translateX(-50%);top:'+(-f*z*R*100).toFixed(1)+'%'}
 function charCrop(c,A){return '<img src="'+esc(asset(c.img))+'" alt="" style="'+cropStyle(A)+'">'}
 function avatarHTML2(size){
   var A=S.profile.avatar||{type:"initial"},bg=A.bg||col("brand"),fg=onColor(bg),inner;
