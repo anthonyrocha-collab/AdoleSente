@@ -1,3 +1,10 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#170a21">
+<style>html{color-scheme:dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <meta name="color-scheme" content="only dark">
 <meta name="supported-color-schemes" content="dark">
 <title>AdoleSente</title>
@@ -130,7 +137,7 @@ button,a,select,summary,.note,.fcard,.tile{touch-action:manipulation;-webkit-tap
   background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--c) 28%,#fff),color-mix(in srgb,var(--c) 70%,#fff) 70%,var(--c));
   aspect-ratio:var(--ratio)}
 .fig img{display:block;width:100%;height:auto}
-.fig.fixed img{height:100%;object-fit:var(--fit)}
+.fig.fixed img{height:100%;object-fit:var(--fit);object-position:50% 67%}
 .fig.ph{aspect-ratio:3/4;color:#fff;font:700 3.2rem var(--f-display)}
 .fcard b{font-family:var(--f-display);color:var(--head);font-size:1.1rem}
 .fcard .bio{font-size:.88rem;color:var(--muted)}
@@ -278,17 +285,21 @@ body.mob nav.tabs .in{max-width:100%}
 body.mob .overlay{justify-content:center;align-items:flex-end}
 body.mob .sheet{max-width:430px;width:100%;margin-inline:auto}
 body.mob .profile{max-width:430px;height:100%;border-radius:0}
-body.mob .pfig{top:0;width:74%}
-body.mob .pfig img{object-position:right bottom}
-body.mob .pinfo{width:100%;padding:max(20px,env(safe-area-inset-top,0px)) calc(50% + 2px) 84px 16px;gap:9px;scrollbar-width:thin}
-body.mob .pname{font-size:clamp(1.6rem,8vw,2.3rem);text-shadow:0 1px 8px rgba(0,0,0,.35)}
+body.mob .pmark{display:none}
+/* ficha no celular: corpo inteiro e grande à direita, informações na coluna da esquerda */
+body.mob .pfig{left:auto;right:-17%;top:auto;bottom:0;width:auto;height:90%;aspect-ratio:9/16}
+body.mob .pfig img{width:100%;height:100%;object-fit:contain;object-position:center bottom;transform:none}
+body.mob .pinfo{position:relative;width:100%;height:100%;max-height:none;border-radius:0;background:none;box-shadow:none;gap:8px;scrollbar-width:thin;
+  padding:max(56px,env(safe-area-inset-top,0px)) calc(54% + 2px) calc(84px + env(safe-area-inset-bottom,0px)) 16px;z-index:2}
+body.mob .pinfo>*{text-shadow:0 0 5px var(--c),0 0 10px var(--c),0 1px 2px color-mix(in srgb,var(--c) 70%,#000)}
 body.mob .pkick{font-size:.64rem}
+body.mob .pname{font-size:clamp(1.7rem,8.4vw,2.2rem)}
 body.mob .prole{font-size:.92rem}
-body.mob .pquote,body.mob .pbio,body.mob .pdl dd{font-size:.82rem;line-height:1.4}
-body.mob .pchips span{font-size:.7rem;padding:2px 9px}
+body.mob .pquote,body.mob .pbio,body.mob .pdl dd{font-size:.84rem;line-height:1.4}
+body.mob .pchips{gap:5px}
+body.mob .pchips span{font-size:.72rem;padding:2px 9px;background:color-mix(in srgb,var(--c) 55%,transparent)}
 body.mob .pdl{gap:6px}
-body.mob .pdl dt{font-size:.6rem}
-body.mob .pinfo>*{text-shadow:0 1px 6px rgba(0,0,0,.4)}
+body.mob .pdl dt{font-size:.62rem}
 body.mob .btn,body.mob input,body.mob select{min-height:48px}
 body.mob .btn.small{min-height:44px}
 body.mob .friends.grid{grid-template-columns:repeat(min(var(--cols),2),minmax(0,1fr))}
@@ -310,10 +321,11 @@ body.mob .ndock{position:sticky;bottom:calc(var(--nav-h) + 8px);z-index:5;backgr
 body.mob.typing nav.tabs{display:none}
 body.mob.typing .ndock{bottom:8px}
 body.mob.typing{--nav-h:0px}
-body.mob .pname{font-size:2.4rem}
 body.mob .pmark{font-size:7rem}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+</head>
+<body>
 
 <div class="bg" aria-hidden="true"></div>
 <div class="wrap">
@@ -353,11 +365,11 @@ function defaults(){return {
     brand:"#6C318C",accent:"#892CB0",surface:"#06C300",text:"#06A700",extra:"#EE82EE",ink:"#2b1238",
     radius:{card:24,button:999,input:12,tile:16}, gloss:true,
     fonts:{display:"Space Grotesk",body:"Inter",mono:"IBM Plex Mono"}, customFonts:{},
-    logo:"logo.png", layout:"auto", logoSize:64, showName:false, heroImg:"", bgImg:"", bubbles:true, scale:100
+    logo:"logo.png", layout:"mobile", logoSize:64, showName:false, heroImg:"", bgImg:"", bubbles:true, scale:100
   },
   nav:[{id:"home",label:"Início",on:true},{id:"diary",label:"Diário",on:true},{id:"suggestion",label:"Sugestão",on:true},{id:"friends",label:"Amigos",on:true},{id:"profile",label:"Perfil",on:true}],
   home:{banner:true,question:true,tiles:true,align:"left"},
-  friends:{title:"Conheça nossos amigos",layout:"grid",cols:2,fit:"contain",ratio:"auto",showRole:true,showBio:false},
+  friends:{title:"Conheça nossos amigos",layout:"grid",cols:2,fit:"cover",ratio:"5/7",showRole:true,showBio:false},
   buttons:[
     {id:"b1",label:"Meu diário",hint:"Escreva quando quiser",target:"diary",color:"accent",w:6},
     {id:"b2",label:"Sugestão do dia",hint:"Algo para fazer longe da tela",target:"suggestion",color:"text",w:3},
@@ -464,6 +476,12 @@ var S=load();
   if(S.welcome&&S.welcome.pos==="afterBanner"&&S.welcome.bg==="#EE82EE"&&S.welcome.on===true)S.welcome=JSON.parse(JSON.stringify(d.welcome));
   if(S.buttons&&S.buttons[0]&&S.buttons[0].hint==="Só você lê")S.buttons=JSON.parse(JSON.stringify(d.buttons));
   S.contentVer=4;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+})();
+(function(){ // v5: formato celular como padrão e galeria dos amigos 5:7
+  if((S.contentVer||1)>=5)return;
+  if(!S.theme.layout||S.theme.layout==="auto")S.theme.layout="mobile";
+  if(S.friends&&S.friends.ratio==="auto"&&S.friends.fit==="contain"){S.friends.ratio="5/7";S.friends.fit="cover"}
+  S.contentVer=5;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
 })();
 if(!S.nav.some(function(n){return n.id==="profile"}))S.nav.push({id:"profile",label:"Perfil",on:true});
 if(S.profile.avatar&&S.profile.avatar.type==="img"){S.profile.avatar.type="initial"}if(S.profile.avatar)S.profile.avatar.img="";
@@ -1004,3 +1022,6 @@ window.addEventListener("error",function(e){toast("Erro: "+e.message)});
 applyTheme();renderNav();renderView();setTimeout(tutAsk,600);
 })();
 </script>
+
+</body>
+</html>
